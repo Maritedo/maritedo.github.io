@@ -1,5 +1,5 @@
 import { fileURLToPath, URL } from 'node:url'
-import { icons, Url } from './icons'
+import { parsedIcons, Url } from './icons'
 
 import { UserConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa';
@@ -12,17 +12,20 @@ import Components from 'unplugin-vue-components/vite'
 
 
 export default ({ mode }: { mode: string }): UserConfig => {
-  let baseUrl;
+  let baseUrl, iconsUrl;
   const devMode = mode === 'development'
   switch (mode) {
     case 'production':
       baseUrl = './'
+      iconsUrl = ''
       break
     case 'gitpages':
       baseUrl = '/Vue-PWA/'
+      iconsUrl = 'Vue-PWA'
       break
     default:
       baseUrl = '/'
+      iconsUrl = ''
       break
   }
   return {
@@ -48,7 +51,7 @@ export default ({ mode }: { mode: string }): UserConfig => {
             preferred_width: 480
           },
           // 清单信息
-          icons: icons,
+          icons: parsedIcons(iconsUrl),
           display_override: [
             "window-controls-overlay",
             "fullscreen",
@@ -62,7 +65,7 @@ export default ({ mode }: { mode: string }): UserConfig => {
               url: "/test/1",
               icons: [
                 {
-                  src: Url("android/android-launchericon-96-96.png"),
+                  src: Url(iconsUrl, "android/android-launchericon-96-96.png"),
                   sizes: "96x96"
                 }
               ]
@@ -72,11 +75,11 @@ export default ({ mode }: { mode: string }): UserConfig => {
           screenshots: [
             //label,platform,type
             {
-              src: Url("screenshots/screenshot-wide.jpeg"),
+              src: Url(iconsUrl, "screenshots/screenshot-wide.jpeg"),
               sizes: "1442x1151",
               form_factor: "wide",
             }, {
-              src: Url("screenshots/screenshot-narrow.jpeg"),
+              src: Url(iconsUrl, "screenshots/screenshot-narrow.jpeg"),
               sizes: "555x1103",
               form_factor: "narrow",
             }
