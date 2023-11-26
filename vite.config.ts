@@ -21,7 +21,7 @@ export default ({ mode }: { mode: string }): UserConfig => {
       break
     case 'gitpages':
       baseUrl = '/Vue-PWA/'
-      iconsUrl = './'
+      iconsUrl = '.'
       break
     default:
       baseUrl = '/'
