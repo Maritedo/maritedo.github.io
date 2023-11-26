@@ -3,7 +3,7 @@ import { type ExtendedRecord } from '../scripts/normal'
 import { Albums, FishOutline, Home } from '@vicons/ionicons5'
 
 const legacy = true
-const useHash = import.meta.env.MODE !== 'development' && legacy
+const useHash = true//import.meta.env.MODE !== 'development' && legacy
 const baseUrl = import.meta.env.BASE_URL
 
 export const routes: ExtendedRecord[] = [

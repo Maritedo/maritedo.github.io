@@ -12,20 +12,23 @@ import Components from 'unplugin-vue-components/vite'
 
 
 export default ({ mode }: { mode: string }): UserConfig => {
-  let baseUrl, prefixUtl;
+  let baseUrl, prefixUrl, prefixShortcuts;
   const devMode = mode === 'development'
   switch (mode) {
     case 'production':
       baseUrl = './'
-      prefixUtl = ''
+      prefixUrl = ''
+      prefixShortcuts = '.'
       break
     case 'gitpages':
       baseUrl = '/Vue-PWA/'
-      prefixUtl = '.'
+      prefixUrl = '.'
+      prefixShortcuts = ''
       break
     default:
       baseUrl = '/'
-      prefixUtl = ''
+      prefixUrl = ''
+      prefixShortcuts = '/#/'
       break
   }
   return {
@@ -51,7 +54,7 @@ export default ({ mode }: { mode: string }): UserConfig => {
             preferred_width: 480
           },
           // 清单信息
-          icons: parsedIcons(prefixUtl),
+          icons: parsedIcons(prefixUrl),
           display_override: [
             "window-controls-overlay",
             "fullscreen",
@@ -60,12 +63,34 @@ export default ({ mode }: { mode: string }): UserConfig => {
           // 快捷方式
           shortcuts: [
             {
-              name: "Test",
-              description: "Test",
-              url: prefixUtl + "/test/1",
+              name: "主页",
+              description: "主页",
+              url: prefixShortcuts + "",
               icons: [
                 {
-                  src: Url(prefixUtl, "android/android-launchericon-96-96.png"),
+                  src: Url(prefixUrl, "android/android-launchericon-96-96.png"),
+                  sizes: "96x96"
+                }
+              ]
+            },
+            {
+              name: "测试集",
+              description: "正在测试的一些玩意",
+              url: prefixShortcuts + "test/1",
+              icons: [
+                {
+                  src: Url(prefixUrl, "android/android-launchericon-96-96.png"),
+                  sizes: "96x96"
+                }
+              ]
+            },
+            {
+              name: "工具集",
+              description: "Test",
+              url: prefixShortcuts + "tool/1",
+              icons: [
+                {
+                  src: Url(prefixUrl, "android/android-launchericon-96-96.png"),
                   sizes: "96x96"
                 }
               ]
@@ -75,11 +100,11 @@ export default ({ mode }: { mode: string }): UserConfig => {
           screenshots: [
             //label,platform,type
             {
-              src: Url(prefixUtl, "screenshots/screenshot-wide.jpeg"),
+              src: Url(prefixUrl, "screenshots/screenshot-wide.jpeg"),
               sizes: "1442x1151",
               form_factor: "wide",
             }, {
-              src: Url(prefixUtl, "screenshots/screenshot-narrow.jpeg"),
+              src: Url(prefixUrl, "screenshots/screenshot-narrow.jpeg"),
               sizes: "555x1103",
               form_factor: "narrow",
             }
@@ -88,11 +113,11 @@ export default ({ mode }: { mode: string }): UserConfig => {
           protocol_handlers: [
             {
               protocol: "web+test",
-              url: prefixUtl + "/test/%s"
+              url: prefixUrl + "/test/%s"
             },
             {
               protocol: "web+tool",
-              url: prefixUtl + "/tool/%s"
+              url: prefixUrl + "/tool/%s"
             }
           ]
         },

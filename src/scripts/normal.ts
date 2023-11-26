@@ -21,6 +21,15 @@ export const configureThemeColor = (color: string) => {
   })
 }
 
+export const getArgs = () => {
+  const args: { [key: string]: string } = {};
+  decodeURI(document.URL).split("?")[1].split("&").forEach((e) => {
+    const [a, b] = e.split("=");
+    args[a] = b;
+  });
+  return args
+}
+
 export type ExtendedRecord = {
   path: string,
   name: string,
