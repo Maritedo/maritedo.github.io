@@ -12,20 +12,20 @@ import Components from 'unplugin-vue-components/vite'
 
 
 export default ({ mode }: { mode: string }): UserConfig => {
-  let baseUrl, iconsUrl;
+  let baseUrl, prefixUtl;
   const devMode = mode === 'development'
   switch (mode) {
     case 'production':
       baseUrl = './'
-      iconsUrl = ''
+      prefixUtl = ''
       break
     case 'gitpages':
       baseUrl = '/Vue-PWA/'
-      iconsUrl = '.'
+      prefixUtl = '.'
       break
     default:
       baseUrl = '/'
-      iconsUrl = ''
+      prefixUtl = ''
       break
   }
   return {
@@ -51,7 +51,7 @@ export default ({ mode }: { mode: string }): UserConfig => {
             preferred_width: 480
           },
           // 清单信息
-          icons: parsedIcons(iconsUrl),
+          icons: parsedIcons(prefixUtl),
           display_override: [
             "window-controls-overlay",
             "fullscreen",
@@ -62,10 +62,10 @@ export default ({ mode }: { mode: string }): UserConfig => {
             {
               name: "Test",
               description: "Test",
-              url: "/test/1",
+              url: prefixUtl + "/test/1",
               icons: [
                 {
-                  src: Url(iconsUrl, "android/android-launchericon-96-96.png"),
+                  src: Url(prefixUtl, "android/android-launchericon-96-96.png"),
                   sizes: "96x96"
                 }
               ]
@@ -75,11 +75,11 @@ export default ({ mode }: { mode: string }): UserConfig => {
           screenshots: [
             //label,platform,type
             {
-              src: Url(iconsUrl, "screenshots/screenshot-wide.jpeg"),
+              src: Url(prefixUtl, "screenshots/screenshot-wide.jpeg"),
               sizes: "1442x1151",
               form_factor: "wide",
             }, {
-              src: Url(iconsUrl, "screenshots/screenshot-narrow.jpeg"),
+              src: Url(prefixUtl, "screenshots/screenshot-narrow.jpeg"),
               sizes: "555x1103",
               form_factor: "narrow",
             }
@@ -88,11 +88,11 @@ export default ({ mode }: { mode: string }): UserConfig => {
           protocol_handlers: [
             {
               protocol: "web+test",
-              url: "/test/%s"
+              url: prefixUtl + "/test/%s"
             },
             {
               protocol: "web+tool",
-              url: "/tool/%s"
+              url: prefixUtl + "/tool/%s"
             }
           ]
         },
