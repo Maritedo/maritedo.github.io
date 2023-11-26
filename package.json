@@ -9,6 +9,7 @@
     "build-only": "vite build",
     "build-run": "vite build & vite preview",
     "legacy": "vue-tsc --noEmit --skipLibCheck && vite build",
+    "gitpages": "vite build --mode gitpages",
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/"

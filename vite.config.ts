@@ -10,10 +10,23 @@ import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 
+
 export default ({ mode }: { mode: string }): UserConfig => {
+  let baseUrl;
   const devMode = mode === 'development'
+  switch (mode) {
+    case 'production':
+      baseUrl = './'
+      break
+    case 'gitpages':
+      baseUrl = '/Vue-PWA/'
+      break
+    default:
+      baseUrl = '/'
+      break
+  }
   return {
-    base: devMode ? '/' : './',
+    base: baseUrl,
     plugins: [
       vue(),
       devMode ? null : legacy({
