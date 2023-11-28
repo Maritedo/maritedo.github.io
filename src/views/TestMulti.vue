@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        测试
+        这是测试嵌套菜单的页面。
     </div>
 </template>
 
@@ -8,4 +8,6 @@
 
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+
+</style>

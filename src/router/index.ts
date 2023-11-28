@@ -71,7 +71,7 @@ export const routes: ExtendedRecord[] = (function _(datas: ExtendedRecord[]) {
           {
             name: 'emm',
             path: '000',
-            component: () => import('@/views/TestMain.vue'),
+            component: () => import('@/views/TestMulti.vue'),
             meta: {
               title: '测试嵌套'
             }
@@ -111,7 +111,7 @@ export const routes: ExtendedRecord[] = (function _(datas: ExtendedRecord[]) {
         path: '2',
         name: 'func2',
         meta: {
-          title: "不是验证码是识字游戏。",
+          title: "不是验证码。",
           keepAlive: true
         },
         component: () => import('@/views/VeriCodeTest.vue')
