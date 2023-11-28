@@ -36,7 +36,7 @@ export type ExtendedRecord = RouteRecordRaw & {
     title: string,
     menuDefault?: boolean,
     menuGroup?: boolean,
-   epAlive?: boolean,
+    epAlive?: boolean,
     icon?: DefineComponent<{}, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, EmitsOptions, string, VNodeProps & AllowedComponentProps & ComponentCustomProps, Readonly<any>, {}, {}>,
     [key: string]: any
   },
