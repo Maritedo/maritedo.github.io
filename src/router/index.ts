@@ -69,8 +69,8 @@ export const routes: ExtendedRecord[] = (function _(datas: ExtendedRecord[]) {
         page: () => import('@/views/ColorGame.vue'),
         children: [
           {
-            name: 'emm',
-            path: '000',
+            name: '0',
+            path: 'emm',
             component: () => import('@/views/TestMulti.vue'),
             meta: {
               title: '测试其一·嵌套'
