@@ -28,24 +28,24 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: 检查 | Checkout
         uses: actions/checkout@v3
-      - name: Set up Node
+      - name: 配置Node.js | Set up Node
         uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: 'npm'
-      - name: Install dependencies
+      - name: 安装依赖 | Install dependencies
         run: npm install
-      - name: Build
+      - name: 构建 | Build
         run: npm run gitpages
-      - name: Setup Pages
+      - name: 配置Pages | Setup Pages
         uses: actions/configure-pages@v3
-      - name: Upload artifact
+      - name: 上传生成文件 | Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
           # Upload dist repository
           path: './dist'
-      - name: Deploy to GitHub Pages
+      - name: 部署到GitHub Pages | Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
