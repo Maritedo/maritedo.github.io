@@ -2,8 +2,22 @@
   <n-config-provider fullH :theme="theme">
     <n-layout class="n-container" content-style="display: flex; flex-direction: column;" fullH>
       <n-layout-header class="n-header" bordered @click.prevent style="box-shadow: var(--box-shadow-1);">
-        <n-page-header subtitle="测试页面" @back="appRouter.go(-1)">
-          <template #title> 主页 </template>
+        <n-page-header @back="appRouter.go(-1)">
+          <template #title>
+            <n-breadcrumb class="breadcrumb">
+              <n-breadcrumb-item :clickable="false">
+                测试应用
+              </n-breadcrumb-item>
+              <transition name="breadcrumb" v-for="(name, index) in getDisplayNames(menuRef?.activePath || [])"
+                :key="index">
+                <n-breadcrumb-item :key="name.original">
+                  <router-link :to="{ name: name.original }">
+                    {{ name.display }}
+                  </router-link>
+                </n-breadcrumb-item>
+              </transition>
+            </n-breadcrumb>
+          </template>
           <template #extra>
             <n-switch :rail-style="dayNightRail" v-model:value="useDark">
               <template #checked>
@@ -22,7 +36,8 @@
       </n-layout-header>
       <n-layout class="n-main" has-sider>
         <n-layout-sider class="n-sider" collapse-mode="width" bordered show-trigger>
-          <n-menu :options="menuOptions" :default-expanded-keys="defaultExpandedKeys" :value="page" class="i-menu" />
+          <n-menu ref="menuRef" :options="menuOptions" :default-expanded-keys="defaultExpandedKeys" :value="curPage"
+            class="i-menu" />
         </n-layout-sider>
         <n-layout-content class="n-content" :native-scrollbar="false">
           <router-view v-slot="{ Component, route }">
@@ -40,41 +55,42 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch } from 'vue'
+import { type Ref, ref, computed, watch, onMounted } from 'vue'
 import { useOsTheme, darkTheme, NIcon, useThemeVars } from 'naive-ui'
-import type { MenuOption, GlobalTheme } from 'naive-ui'
+import type { MenuOption, GlobalTheme, NBreadcrumb } from 'naive-ui'
 import {
   Moon as MoonIcon,
   Sunny as SunIcon,
 } from '@vicons/ionicons5'
 import { RouterView, useRouter } from 'vue-router'
-import { routes } from './router/index'
+import { routes, getDisplayNames } from './router/index'
 import { configureThemeColor, genMenuOptions as genMenu } from './scripts/normal'
 
-const page = ref()
+const menuRef = ref()
+const curPage: Ref<any> = ref()
 const themeVars = useThemeVars().value
+const appRouter = useRouter();
 const menuOptions: MenuOption[] = genMenu(routes)
 const defaultExpandedKeys: string[] = []
 const useDark = ref<Boolean>(useOsTheme().value === 'dark')
-watch(useDark, () => {
-  configureThemeColor(useDark.value ? darkTheme.common.baseColor : themeVars.baseColor)
-}, { immediate: true })
 const theme = computed<GlobalTheme | null>(() => {
-  if (useDark.value) {
-    return darkTheme
-  } else {
-    return null
-  }
+  return useDark.value ? darkTheme : null
 })
 const dayNightRail = (info: any) => {
   return {
     backgroundColor: info.checked ? '#bdc6ce' : '#ffd700'
   }
 }
-const appRouter = useRouter();
 appRouter.beforeEach((to) => {
-  page.value = to.name;
+  curPage.value = to.name
+  if (to.name && !(to.name in menuRef.value.activePath))
+    menuRef.value.showOption(to.name)
   return to.name ? appRouter.hasRoute(to.name) : false
+})
+onMounted(() => {
+  watch(useDark, () => {
+    configureThemeColor(useDark.value ? darkTheme.common.baseColor : themeVars.baseColor)
+  }, { immediate: true })
 })
 </script>
 
@@ -93,22 +109,25 @@ appRouter.beforeEach((to) => {
   }
 }
 
+.n-header,
+.n-sider {
+  * {
+    user-select: none;
+  }
+}
+
 .i-content {
   width: 100%;
+  height: 100%;
   box-sizing: border-box;
-  padding: 8px 8px 8px 2px;
 }
 
 .i-menu {
   text-align: left;
 }
 
-.fade-enter-from {
-  opacity: 0;
-  transform: translateY(-100%);
-}
-
-.fade-enter-to {
+.fade-enter-to,
+.fade-leave-from {
   transform: translateY(0%);
   opacity: 1;
 }
@@ -119,13 +138,44 @@ appRouter.beforeEach((to) => {
   position: absolute;
 }
 
-.fade-leave-from {
-  transform: translateY(0%);
-  opacity: 1;
+.fade-enter-from {
+  opacity: 0;
+  transform: translateY(-100%);
 }
 
 .fade-leave-to {
   transform: translateY(100%);
   opacity: 0;
+}
+
+.breadcrumb-enter-to,
+.breadcrumb-leave-from {
+  transform: translateY(0%);
+  opacity: 1;
+}
+
+.breadcrumb-enter-from {
+  opacity: 0;
+  transform: translateY(+100%);
+}
+
+.breadcrumb-leave-to {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.breadcrumb-leave-active,
+.breadcrumb-enter-active {
+  transition: all .2s ease;
+}
+
+.breadcrumb-leave-active {
+  position: absolute;
+}
+</style>
+
+<style lang="scss">
+.breadcrumb-leave-active:nth-last-child(2)>span:last-child {
+  display: none;
 }
 </style>
