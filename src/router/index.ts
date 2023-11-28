@@ -73,7 +73,7 @@ export const routes: ExtendedRecord[] = (function _(datas: ExtendedRecord[]) {
             path: '000',
             component: () => import('@/views/TestMulti.vue'),
             meta: {
-              title: '测试嵌套'
+              title: '测试其一·嵌套'
             }
           }
         ]
