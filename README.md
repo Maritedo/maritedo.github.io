@@ -68,7 +68,7 @@ npm run format
 npm run legacy
 ```
 
-### 构建用于[Github Pages]([https://pages.github.com](https://pages.github.com/))的页面
+### 构建用于[Github Pages](https://pages.github.com/)的页面
 
 ```sh
 npm run gitpages
