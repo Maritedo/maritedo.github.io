@@ -10,11 +10,12 @@
               </n-breadcrumb-item>
               <transition name="breadcrumb" v-for="(name, index) in getDisplayNames(menuRef?.activePath || [])"
                 :key="index">
-                <n-breadcrumb-item :key="name.original">
+                <n-breadcrumb-item :key="name.original" @click.prevent="onBreadcurmbClick">
                   <router-link :to="{ name: name.original }">
                     {{ name.display }}
                   </router-link>
                 </n-breadcrumb-item>
+
               </transition>
             </n-breadcrumb>
           </template>
@@ -55,18 +56,18 @@
 </template>
 
 <script lang="ts" setup>
-import { type Ref, ref, computed, watch, onMounted } from 'vue'
-import { useOsTheme, darkTheme, NIcon, useThemeVars } from 'naive-ui'
+import { type Ref, ref, computed, watch, onMounted, type VNodeRef } from 'vue'
+import { useOsTheme, darkTheme, NIcon, useThemeVars, NMenu } from 'naive-ui'
 import type { MenuOption, GlobalTheme, NBreadcrumb } from 'naive-ui'
 import {
   Moon as MoonIcon,
   Sunny as SunIcon,
 } from '@vicons/ionicons5'
 import { RouterView, useRouter } from 'vue-router'
-import { routes, getDisplayNames } from './router/index'
+import router, { routes, getDisplayNames } from './router/index'
 import { configureThemeColor, genMenuOptions as genMenu } from './scripts/normal'
 
-const menuRef = ref()
+const menuRef: Ref<typeof NMenu> | Ref<any> = ref()
 const curPage: Ref<any> = ref()
 const themeVars = useThemeVars().value
 const appRouter = useRouter();
@@ -76,12 +77,17 @@ const useDark = ref<Boolean>(useOsTheme().value === 'dark')
 const theme = computed<GlobalTheme | null>(() => {
   return useDark.value ? darkTheme : null
 })
+const onBreadcurmbClick = (e: PointerEvent) => {
+  const element = e.target as HTMLElement
+  router.push(element.querySelector('a')?.getAttribute('href') || '')
+}
 const dayNightRail = (info: any) => {
   return {
     backgroundColor: info.checked ? '#bdc6ce' : '#ffd700'
   }
 }
 appRouter.beforeEach((to) => {
+  console.log(menuRef)
   curPage.value = to.name
   if (to.name && !(to.name in menuRef.value.activePath))
     menuRef.value.showOption(to.name)
