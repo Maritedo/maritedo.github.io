@@ -22,7 +22,7 @@
 
 <script>
 // const useDev = true
-// const dev = (...e) => useDev ? console.log(...e) : void (0);
+// const dev = (...e) => useDev ? console.log(...e) : void (0)
 </script>
 
 <script setup>

@@ -1,6 +1,3 @@
-// export const 被处理数据 = 
-
-
 export const 处理后数据 = (function 名字随意(待处理层次) {
     for (let 次级数据 of 待处理层次) {
         次级数据.大小++

@@ -70,7 +70,7 @@ import { configureThemeColor, simulateClick, genMenuOptions as genMenu } from '.
 const menuRef: Ref<typeof NMenu> | Ref<any> = ref()
 const curPage: Ref<any> = ref()
 const themeVars = useThemeVars().value
-const appRouter = useRouter();
+const appRouter = useRouter()
 const menuOptions: MenuOption[] = genMenu(routes)
 const defaultExpandedKeys: string[] = []
 const useDark = ref<Boolean>(useOsTheme().value === 'dark')
@@ -80,7 +80,7 @@ const theme = computed<GlobalTheme | null>(() => {
 const onBreadcurmbClick = (e: PointerEvent) => {
   const element = e.target as HTMLElement
   console.log(element)
-  if (element.tagName !== 'span') return;
+  if (element.tagName !== 'span') return
   const a = element.querySelector('a')
   a && simulateClick(a)
   // router.push(element.querySelector('a')?.getAttribute('href') || '')

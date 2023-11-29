@@ -17,16 +17,16 @@ export const renderLink = (label: string, to: RouteRecordName | undefined, key =
 
 export const configureThemeColor = (color: string) => {
   document.querySelectorAll('meta[name="theme-color"]').forEach((meta) => {
-    meta.setAttribute('content', color);
+    meta.setAttribute('content', color)
   })
 }
 
 export const getArgs = () => {
-  const args: { [key: string]: string } = {};
+  const args: { [key: string]: string } = {}
   decodeURI(document.URL).split("?")[1].split("&").forEach((e) => {
-    const [a, b] = e.split("=");
-    args[a] = b;
-  });
+    const [a, b] = e.split("=")
+    args[a] = b
+  })
   return args
 }
 
@@ -36,7 +36,7 @@ export const simulateClick = (ele: HTMLElement) => {
     view: window,
     bubbles: false,
     cancelable: true,
-  }));
+  }))
 }
 
 
@@ -54,7 +54,7 @@ export type ExtendedRecord = RouteRecordRaw & {
 }
 
 export const genMenuOptions = (records: ExtendedRecord[]): MenuOption[] => {
-  const result = new Array<MenuOption>;
+  const result = new Array<MenuOption>
   for (const route of records) {
     const m = route.meta
     if (m && !m.menuDefault) {
@@ -83,25 +83,25 @@ export const propIsTrue = (val: string | boolean | null) => {
   }
 }
 
-export const addClassTo = (element: HTMLElement) => (className: string) => element.classList.add(className);
+export const addClassTo = (element: HTMLElement) => (className: string) => element.classList.add(className)
 
 export const keepIn = (x: number, _min: number, _max: number) => {
-  return Math.max(Math.min(_max, x), _min);
-};
+  return Math.max(Math.min(_max, x), _min)
+}
 
-const rate1 = .7, rate2 = .1;
-const cmin = 255 * rate1, cmax = 255 - 255 * rate2;
-const range = [0, 255];
-const _r = range[1] - range[0];
+const rate1 = .7, rate2 = .1
+const cmin = 255 * rate1, cmax = 255 - 255 * rate2
+const range = [0, 255]
+const _r = range[1] - range[0]
 
 export const randomColor = () => {
-  const _vals: number[] = [];
+  const _vals: number[] = []
   for (let _i = 0; _i < 3; _i++)
-    _vals.push(range[0] + Math.round(Math.random() * _r));
-  const imin = _vals[0] > _vals[1] ? (_vals[1] >= _vals[2] ? 2 : 1) : (_vals[0] > _vals[2] ? 2 : 0);
-  const imax = _vals[0] < _vals[1] ? (_vals[1] <= _vals[2] ? 2 : 1) : (_vals[0] < _vals[2] ? 2 : 0);
-  if (_vals[imax] < cmin) _vals[imax] = cmax;
-  if (_vals[imin] > cmax) _vals[imin] = cmin;
+    _vals.push(range[0] + Math.round(Math.random() * _r))
+  const imin = _vals[0] > _vals[1] ? (_vals[1] >= _vals[2] ? 2 : 1) : (_vals[0] > _vals[2] ? 2 : 0)
+  const imax = _vals[0] < _vals[1] ? (_vals[1] <= _vals[2] ? 2 : 1) : (_vals[0] < _vals[2] ? 2 : 0)
+  if (_vals[imax] < cmin) _vals[imax] = cmax
+  if (_vals[imin] > cmax) _vals[imin] = cmin
   return {
     R: _vals[0],
     G: _vals[1],
@@ -110,22 +110,22 @@ export const randomColor = () => {
 }
 
 export const getDPI = (/* ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D */) => {
-  return window.devicePixelRatio || 1// Dece / (ctx.backingStorePixelRatio || 1);
+  return window.devicePixelRatio || 1// Dece / (ctx.backingStorePixelRatio || 1)
 }
 
 export const Rec = (r: number, theta: number) => {
   return {
     x: Math.cos(theta) * r,
     y: Math.sin(theta) * r
-  };
+  }
 }
 
 export const Pol = (x: number, y: number) => {
   return {
     r: Math.sqrt(x ** 2 + y ** 2),
     theta: Math.atan2(y, x) % 360
-  };
-};
+  }
+}
 
 export const random = {
   chars: "112233445566778899abcdefghijkmnrtuyzABDEFGHIJKLMNQRTVY",
@@ -138,26 +138,26 @@ export const random = {
     'copperplate'
   ],
   char: () => {
-    return random.chars[Math.round(Math.random() * (random.chars.length - 1))];
+    return random.chars[Math.round(Math.random() * (random.chars.length - 1))]
   },
   color: (opacity: number) => {
-    const c = randomColor();
+    const c = randomColor()
     return opacity ?
       `rgba(${c.R}, ${c.G}, ${c.B}, 0.7)` :
-      `rgb(${c.R}, ${c.G}, ${c.B})`;
+      `rgb(${c.R}, ${c.G}, ${c.B})`
   },
   size: (_fontH: number) => {
-    return _fontH * 1.0 * (1 + Math.random() / 5);
+    return _fontH * 1.0 * (1 + Math.random() / 5)
   },
   angle: () => {
-    return (2 * Math.random() - 1) * Math.PI / 12;
+    return (2 * Math.random() - 1) * Math.PI / 12
   },
   offset: (_fontH: number, _fontW: number) => {
-    const _p = 0.125;
+    const _p = 0.125
     return {
       x: Math.random() * _p * _fontW,
       y: Math.random() * _p * _fontH
-    };
+    }
   },
   font: () => {
     return random.fonts[Math.round(Math.random() * (random.fonts.length - 1))]
@@ -167,5 +167,5 @@ export const random = {
 export const between = (val: number, val1: number, val2: number) => {
   return val1 <= val2 ?
     (val1 <= val && val <= val2) :
-    (val2 <= val && val <= val1);
+    (val2 <= val && val <= val1)
 }

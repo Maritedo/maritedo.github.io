@@ -1,12 +1,3 @@
-<script setup>
-defineProps({
-
-})
-defineOptions({
-    inheritAttrs: false
-})
-</script>
-
 <template>
     <label class="checkbox_custom">
         <input type="radio" v-bind="$attrs" />
@@ -15,6 +6,15 @@ defineOptions({
         </span>
     </label>
 </template>
+
+<script setup>
+defineProps({
+
+})
+defineOptions({
+    inheritAttrs: false
+})
+</script>
 
 <style scoped>
 @import url("./general.css");

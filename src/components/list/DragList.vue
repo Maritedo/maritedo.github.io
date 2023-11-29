@@ -38,12 +38,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref } from 'vue'
 import { shuffle as $shuffle } from 'lodash'
-import IconMinus from '../icon/IconMinus.vue';
-import IconDelete from '../icon/IconDelete.vue';
-import IconAdd from '../icon/IconAdd.vue';
-import IconShuffle from '../icon/IconShuffle.vue';
+import IconMinus from '../icon/IconMinus.vue'
+import IconDelete from '../icon/IconDelete.vue'
+import IconAdd from '../icon/IconAdd.vue'
+import IconShuffle from '../icon/IconShuffle.vue'
 const emits = defineEmits([
     'update:list'
 ])
@@ -61,67 +61,67 @@ const props = defineProps({
     }
 })
 
-const editingName = ref('Default');
-const editingValue = ref(1);
+const editingName = ref('Default')
+const editingValue = ref(1)
 
-const dragIndex = ref(null);
-// const enterIndex = ref(null);
+const dragIndex = ref(null)
+// const enterIndex = ref(null)
 
 const shuffle = () => {
     emits("update:list", $shuffle(props.list))
-};
+}
 const remove = (index) => {
-    var list_ = props.list;
-    list_.splice(index, 1);
-    emits("update:list", list_);
+    var list_ = props.list
+    list_.splice(index, 1)
+    emits("update:list", list_)
 }
 const reduce = (index) => {
-    var list_ = props.list;
+    var list_ = props.list
     if (--list_[index].value)
-        emits("update:list", list_);
+        emits("update:list", list_)
     else {
-        remove(index);
+        remove(index)
     }
 }
 const add = () => {
     if ((editingName.value != '') && editingValue.value != 0) {
-        var list_ = props.list, index = 0;
+        var list_ = props.list, index = 0
         do {
             if (index != list_.length) {
                 if (list_[index].name == editingName.value) {
                     list_[index].value += editingValue.value
-                    break;
+                    break
                 }
             } else {
                 list_[index] = {
                     name: editingName.value,
                     value: editingValue.value
-                };
-                emits("update:list", list_);
-                break;
+                }
+                emits("update:list", list_)
+                break
             }
-        } while (index++ < list_.length);
+        } while (index++ < list_.length)
         // editingName.value+="."
     }
 }
 
 const dragstart = (index) => {
-    dragIndex.value = index;
-};
+    dragIndex.value = index
+}
 const dragenter = (e, index) => {
-    e.preventDefault();
+    e.preventDefault()
     if (dragIndex.value !== index) {
-        const moving = props.list[dragIndex.value];
-        var list_ = props.list;
-        list_.splice(dragIndex.value, 1);
-        list_.splice(index, 0, moving);
-        emits("update:list", list_);
-        dragIndex.value = index;
+        const moving = props.list[dragIndex.value]
+        var list_ = props.list
+        list_.splice(dragIndex.value, 1)
+        list_.splice(index, 0, moving)
+        emits("update:list", list_)
+        dragIndex.value = index
     }
-};
+}
 const dragover = (e) => {
-    e.preventDefault();
-};
+    e.preventDefault()
+}
 </script>
 <style lang="scss" scoped>
 .container {
