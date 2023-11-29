@@ -1,5 +1,5 @@
 export { HandledCanvas, draw, generate, sizeFit }
-import { Rec, Pol, random } from "./common";
+import { Rec, Pol, random } from "./normal";
 
 const gridStyle = {
     fillStyle: "rgb(63, 63, 63)",

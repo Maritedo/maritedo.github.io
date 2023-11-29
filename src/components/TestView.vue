@@ -65,16 +65,16 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue';
-import { Fabric, Rect } from './test.ts';
+import { onMounted, ref, watch } from 'vue'
+import { Fabric, Rect } from './test.ts'
 
 // START Elements References
 /** @type {{value: HTMLCanvasElement}} */
-const cvs_top = ref();
+const cvs_top = ref()
 /** @type {{value: HTMLCanvasElement}} */
-const cvs_bottom = ref();
+const cvs_bottom = ref()
 /** @type {{value: HTMLDivElement}} */
-const wrapper = ref();
+const wrapper = ref()
 // END 
 
 const width = ref(512),
@@ -91,51 +91,51 @@ const width = ref(512),
     y = ref(256),
     axis = ref('left-top'),
     scaleX = ref(1),
-    scaleY = ref(1);
-var ctx_top, ctx_bottom, fabric;
-const setSize = (w, h) => {
-    wrapper.value.style.setProperty('width', width.value + 'px');
-    wrapper.value.style.setProperty('height', height.value + 'px');
-    fabric.setSize(width.value, height.value);
+    scaleY = ref(1)
+var ctx_top, ctx_bottom, fabric
+const setSize = (/* w, h */) => {
+    wrapper.value.style.setProperty('width', width.value + 'px')
+    wrapper.value.style.setProperty('height', height.value + 'px')
+    fabric.setSize(width.value, height.value)
 }
 
 {
     watch(iwidth, () => {
         rect1.width = iwidth.value
-    });
+    })
     watch(iheight, () => {
         rect1.height = iheight.value
-    });
+    })
     watch(translateX, () => {
         rect1.translateX = translateX.value
-    });
+    })
     watch(translateY, () => {
         rect1.translateY = translateY.value
-    });
+    })
     watch(scaleX, () => {
         rect1.scaleX = scaleX.value
-    });
+    })
     watch(scaleY, () => {
         rect1.scaleY = scaleY.value
-    });
+    })
     watch(fill, () => {
         rect1.fill = fill.value
-    });
+    })
     watch(stroke, () => {
         rect1.stroke = stroke.value
-    });
+    })
     watch(rotate, () => {
         rect1.rotate = rotate.value / 180 * Math.PI
-    });
+    })
     watch(x, () => {
         rect1.x = x.value
-    });
+    })
     watch(y, () => {
         rect1.y = y.value
-    });
+    })
     watch(color, () => {
         rect1.ctxStyle.fillStyle = color.value
-    });
+    })
 }
 
 var rect1 = new Rect({
@@ -154,15 +154,15 @@ var rect1 = new Rect({
     ctxStyle: {
         fillStyle: color.value
     }
-});
+})
 onMounted(() => {
-    ctx_top = cvs_top.value.getContext('2d');
-    ctx_bottom = cvs_bottom.value.getContext('2d');
-    fabric = new Fabric(cvs_top.value, cvs_bottom.value, ctx_top, ctx_bottom);
+    ctx_top = cvs_top.value.getContext('2d')
+    ctx_bottom = cvs_bottom.value.getContext('2d')
+    fabric = new Fabric(cvs_top.value, cvs_bottom.value, ctx_top, ctx_bottom)
     watch(() => { return { w: width, h: height } }, () => {
         setSize(width.value, height.value)
-    }, { immediate: true });
-    fabric.add(rect1).refresh();
+    }, { immediate: true })
+    fabric.add(rect1).refresh()
 })
 </script>
 

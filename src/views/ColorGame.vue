@@ -81,7 +81,7 @@
 
 <script setup>
 import { Pause } from '@vicons/ionicons5'
-import { computed } from 'vue';
+import { computed } from 'vue'
 const hslMode = ref(false)
 const R = ref(0)
 const G = ref(0)

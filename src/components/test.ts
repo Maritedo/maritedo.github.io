@@ -1,7 +1,7 @@
-import { getDPI, Pol, Rec, between } from '../scripts/common'
+import { getDPI, Pol, Rec, between } from '../scripts/normal'
 
 export class Fabric {
-    private _objects: FabricObj[];
+    private _objects: FabricObj[]
     private _activated: Map<FabricObj, boolean>;
     private _width: number = 100;
     private _height: number = 100;
@@ -33,7 +33,7 @@ export class Fabric {
         this._objects = new Array<FabricObj>;
         this._activated = new Map<FabricObj, boolean>;
         window.addEventListener('resize', () => {
-            this.dpi = getDPI(this.ctx.bottom);
+            this.dpi = getDPI(/* this.ctx.bottom */);
         });
         cvs_top.addEventListener("mousedown", (e) => {
             this.onMouseDown(e);
@@ -44,7 +44,7 @@ export class Fabric {
         window.addEventListener("mouseup", () => {
             this.onMouseUp();
         });
-        this._dpi = getDPI(this.ctx.bottom);
+        this._dpi = getDPI(/* this.ctx.bottom */);
         this._updateSize();
     }
 

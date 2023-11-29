@@ -25,8 +25,8 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
-import { randomColor, keepIn } from '../../scripts/common';
+import { computed, ref } from 'vue'
+import { randomColor, keepIn } from '../../scripts/normal'
 const props = defineProps({
     datas: {
         default: [
@@ -46,32 +46,32 @@ const props = defineProps({
     msg: {
 
     }
-});
-const emits = defineEmits([
+})
+defineEmits([
     "update:msg"
-]);
-const message = ref("数据为空");
-const hidden = ref(true);
-const wrapper = ref();
-const detailBox = ref();
-const detail = ref();
-const text = ref('');
-const displayWidth = ref('-100%');
-const bound = 4;
+])
+const message = ref("数据为空")
+const hidden = ref(true)
+const wrapper = ref()
+const detailBox = ref()
+const detail = ref()
+const text = ref('')
+const displayWidth = ref('-100%')
+const bound = 4
 
 const paintData = computed(() => {
-    var result = {};
+    var result = {}
     for (let index = 0; index < percents.value.length; index++)
-        result[percents.value[index].name] = computePath(percents.value[index]);
-    return result;
-});
+        result[percents.value[index].name] = computePath(percents.value[index])
+    return result
+})
 /** @param{{ offset, value, color }} percent */
 const computePath = (percent) => {
-    const precision = 0x10000;
+    const precision = 0x10000
     // 0x1000 = 4096 =~ 4000 基本足够
-    var r1 = 16, r2 = r1 * props.padding;
+    var r1 = 16, r2 = r1 * props.padding
     // 1: 优弧 0: 劣弧
-    var arcType = percent.data.value > 0.5 ? 1 : 0;
+    var arcType = percent.data.value > 0.5 ? 1 : 0
     if (percent.data.value == 1) return {
         main: `
         M-${r1} 0
@@ -86,10 +86,10 @@ const computePath = (percent) => {
         A ${r2} ${r2}, 0, 1, 0, ${r2} 0
         A ${r2} ${r2}, 0, 1, 0,-${r2} 0
         `
-    };
-    var angle = 2 * Math.PI * percent.data.value;
+    }
+    var angle = 2 * Math.PI * percent.data.value
     var dx = Math.round(precision * Math.cos(angle)) / precision,
-        dy = -Math.round(precision * Math.sin(angle)) / precision;
+        dy = -Math.round(precision * Math.sin(angle)) / precision
     return {
         main: `
         M ${r1} 0
@@ -102,38 +102,38 @@ const computePath = (percent) => {
         A ${r2} ${r2}, 0, ${arcType}, 0, ${r2 * dx} ${r2 * dy}
         L 0 0
         `
-    };
+    }
 }
 
 // 作缓存
-// const colorStore = new WeakMap();
-var colorStore = {};
+// const colorStore = new WeakMap()
+var colorStore = {}
 const genColor = (name) => {
     if (!colorStore[name]) {
-        var color = randomColor();
-        colorStore[name] = `rgb(${color.R}, ${color.G}, ${color.B})`;
+        var color = randomColor()
+        colorStore[name] = `rgb(${color.R}, ${color.G}, ${color.B})`
     }
-    return colorStore[name];
+    return colorStore[name]
 }
 
 /** @type{{ name: String, data: { offset, value, color } }[]}*/
 const percents = computed(() => {
-    var val = props.datas;
-    if (val.length == 0) return [];
-    var processed = [];
-    var sum = 0, offset = 0;
-    for (let index = 0; index < val.length; index++)
-        sum += val[index].value
-    for (let index = 0; index < val.length; index++) {
+    var val = props.datas
+    if (val.length == 0) return []
+    var processed = []
+    var sum = 0, offset = 0
+    for (const item of val)
+        sum += item.value
+    for (const item of val) {
         processed.push({
-            name: val[index].name,
+            name: item.name,
             data: {
                 offset: offset / sum,
-                value: val[index].value / sum,
-                color: genColor(val[index].name)
+                value: item.value / sum,
+                color: genColor(item.name)
             }
-        });
-        offset += val[index].value;
+        })
+        offset += item.value
     }
     return processed
 })
@@ -143,27 +143,27 @@ const teleTo = (x, y) => {
         x + bound,
         bound,
         wrapper.value.offsetWidth - detailBox.value.offsetWidth - bound
-    )}px`;
+    )}px`
     detailBox.value.style.top = `${keepIn(
         y - bound - detailBox.value.offsetHeight,
         bound,
         wrapper.value.offsetHeight - detailBox.value.offsetHeight - bound
-    )}px`;
+    )}px`
 }
 
-var usingMouse = false;
+var usingMouse = false
 const OnStart = (e) => {
     if (e.type != "focus")
-        usingMouse = true;
-    hidden.value = false;
+        usingMouse = true
+    hidden.value = false
     if (e.type == "touchstart")
-        text.value = e.target.parentElement.getAttribute('title');
+        text.value = e.target.parentElement.getAttribute('title')
     else
-        text.value = e.target.getAttribute('title');
+        text.value = e.target.getAttribute('title')
     setTimeout(() => {
         var overflowWidth = detail.value.offsetWidth - detailBox.value.offsetWidth
-        displayWidth.value = `-${overflowWidth}px`;
-        // detail.value.style.animationPlayState = overflowWidth > 0 ? 'running' : 'paused';
+        displayWidth.value = `-${overflowWidth}px`
+        // detail.value.style.animationPlayState = overflowWidth > 0 ? 'running' : 'paused'
         if (e.type == "touchstart" || (e.type == "focus" && !usingMouse))
             teleTo(
                 (wrapper.value.offsetWidth - detailBox.value.offsetWidth) / 2,
@@ -173,18 +173,18 @@ const OnStart = (e) => {
             teleTo(
                 e.offsetX,
                 e.offsetY
-            );
-    }, 10);
+            )
+    }, 10)
 }
 const OnMoving = (e) => {
-    if (hidden.value) hidden.value = false;
+    if (hidden.value) hidden.value = false
     if (e.type != "touchmove" && e.type != "blur")
         teleTo(e.offsetX, e.offsetY)
 }
 const OnOut = (e) => {
     if (e.type != "blur") {
-        usingMouse = false;
-        hidden.value = true;
+        usingMouse = false
+        hidden.value = true
     }
 }
 </script>
@@ -234,18 +234,13 @@ const OnOut = (e) => {
         --width: 0;
 
         @keyframes marquee {
-            0% {
-                transform: translateX(0);
-            }
 
+            0%,
             10% {
                 transform: translateX(0);
             }
 
-            90% {
-                transform: translateX(var(--width));
-            }
-
+            90%,
             100% {
                 transform: translateX(var(--width));
             }

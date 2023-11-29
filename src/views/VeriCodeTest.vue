@@ -16,9 +16,9 @@
 </template>
 
 <script setup>
-const useDebug = ref(false);
-const useInfo = ref(false);
-const useAnim = ref(false);
+const useDebug = ref(false)
+const useInfo = ref(false)
+const useAnim = ref(false)
 </script>
 
 <style lang="scss" scoped>

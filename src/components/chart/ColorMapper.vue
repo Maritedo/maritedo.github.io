@@ -26,14 +26,14 @@
 </template>
 
 <script>
-const pi = Math.PI;
-// 待定
-const offsets = [
-    //{ x: 0, y: 0, z: 0 },
-    { x: 0, y: 1, z: 1 },
-    { x: 1, y: 1, z: 1 },
-    { x: 1, y: 0, z: 0 },
-];
+// const pi = Math.PI;
+// // 待定
+// const offsets = [
+//     //{ x: 0, y: 0, z: 0 },
+//     { x: 0, y: 1, z: 1 },
+//     { x: 1, y: 1, z: 1 },
+//     { x: 1, y: 0, z: 0 },
+// ];
 // export const mapCord = (length, { x, y, z }) => {
 //   var _x, _y, r, theta, distance, cut;
 //   theta = pi * x / 255;
@@ -65,7 +65,7 @@ export const mapCord = (length, { x, y, z }) => {
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
-import { getDPI } from "../../scripts/common"
+import { getDPI } from "../../scripts/normal"
 const sizex = ref(1024);
 /**@type{CanvasRenderingContext2D} ctx*/
 var ctx;

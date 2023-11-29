@@ -56,7 +56,7 @@
 </template>
 
 <script lang="ts" setup>
-import { type Ref, ref, computed, watch, onMounted, type VNodeRef } from 'vue'
+import { type Ref, ref, computed, watch, onMounted } from 'vue'
 import { useOsTheme, darkTheme, NIcon, useThemeVars, NMenu } from 'naive-ui'
 import type { MenuOption, GlobalTheme, NBreadcrumb } from 'naive-ui'
 import {
@@ -64,8 +64,8 @@ import {
   Sunny as SunIcon,
 } from '@vicons/ionicons5'
 import { RouterView, useRouter } from 'vue-router'
-import router, { routes, getDisplayNames } from './router/index'
-import { configureThemeColor, genMenuOptions as genMenu } from './scripts/normal'
+import { routes, getDisplayNames } from './router/index'
+import { configureThemeColor, simulateClick, genMenuOptions as genMenu } from './scripts/normal'
 
 const menuRef: Ref<typeof NMenu> | Ref<any> = ref()
 const curPage: Ref<any> = ref()
@@ -79,7 +79,11 @@ const theme = computed<GlobalTheme | null>(() => {
 })
 const onBreadcurmbClick = (e: PointerEvent) => {
   const element = e.target as HTMLElement
-  router.push(element.querySelector('a')?.getAttribute('href') || '')
+  console.log(element)
+  if (element.tagName !== 'span') return;
+  const a = element.querySelector('a')
+  a && simulateClick(a)
+  // router.push(element.querySelector('a')?.getAttribute('href') || '')
 }
 const dayNightRail = (info: any) => {
   return {
@@ -87,7 +91,6 @@ const dayNightRail = (info: any) => {
   }
 }
 appRouter.beforeEach((to) => {
-  console.log(menuRef)
   curPage.value = to.name
   if (to.name && !(to.name in menuRef.value.activePath))
     menuRef.value.showOption(to.name)

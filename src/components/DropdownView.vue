@@ -15,20 +15,20 @@
         <div ref="container" class="container">
             <div ref="content" class="content" align="center">
                 <slot />
-            </div>
+            </div>;
         </div>
     </div>
 </template>
 
 <script>
-// const useDev = true;
+// const useDev = true
 // const dev = (...e) => useDev ? console.log(...e) : void (0);
 </script>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue';
-import { propIsTrue } from '../scripts/common';
-import IconDrop from './icon/IconDrop.vue';
+import { simulateClick, propIsTrue } from './../scripts/normal'
+import { onMounted, ref, watch } from 'vue'
+import IconDrop from './icon/IconDrop.vue'
 const props = defineProps({
     title: {
         default: ""
@@ -36,46 +36,39 @@ const props = defineProps({
     autoExpand: {
         default: false
     }
-});
-const simulateClick = (ele) => {
-    ele.dispatchEvent(new MouseEvent("click", {
-        view: window,
-        bubbles: false,
-        cancelable: true,
-    }));
-}
+})
 // 响应式常量
-const checkBox = ref();
-const container = ref();
-const content = ref();
-const show = ref(propIsTrue(props.autoExpand));
+const checkBox = ref()
+const container = ref()
+const content = ref()
+const show = ref(propIsTrue(props.autoExpand))
 
-var isMoving = false, storedHeight;
-const classActive = "container-active";
+var isMoving = false, storedHeight
+const classActive = "container-active"
 const displays = {
     normal: "visible",
     hidden: "hidden"
-};
+}
 const states = {
     show: 'toggle-show',
     hide: 'toggle-hide',
     trans: 'toggle-trans'
-};
+}
 const handlerSwitch = () => {
     if (isMoving) {
-        transitionHandlers.switch(show.value);
-        if (show.value) animate.enter();
-        else animate.leave();
+        transitionHandlers.switch(show.value)
+        if (show.value) animate.enter()
+        else animate.leave()
     } else
-        transitionHandlers.invoke();
-};
+        transitionHandlers.invoke()
+}
 const initTrans = () => {
-    transitionHandlers.reset(true);
-    storedHeight = `${container.value.getBoundingClientRect().height}px`;
-    transitionHandlers.reset(show.value);
-    content.value.style.visibility = show.value ? displays.normal : displays.hidden;
-    classAdd(show.value ? states.show : states.hide);
-    setTimeout(() => classAdd(states.trans));
+    transitionHandlers.reset(true)
+    storedHeight = `${container.value.getBoundingClientRect().height}px`
+    transitionHandlers.reset(show.value)
+    content.value.style.visibility = show.value ? displays.normal : displays.hidden
+    classAdd(show.value ? states.show : states.hide)
+    setTimeout(() => classAdd(states.trans))
 }
 const transitionHandlers = {
     filter: (e) => (e.target != container.value || e.propertyName != "height"),
@@ -83,50 +76,50 @@ const transitionHandlers = {
     reset: (v) => container.value.style.height = v ? "auto" : "0",
     invoke: () => {
         // Initiate Content
-        content.value.style.visibility = displays.normal;
+        content.value.style.visibility = displays.normal
         // Get & Store Targeted Height 
-        transitionHandlers.reset(true);
-        storedHeight = `${container.value.getBoundingClientRect().height}px`;
+        transitionHandlers.reset(true)
+        storedHeight = `${container.value.getBoundingClientRect().height}px`
         // Initiate Container Height & Transition Proper
-        transitionHandlers.switch(!show.value);
-        container.value.classList.add(classActive);
+        transitionHandlers.switch(!show.value)
+        container.value.classList.add(classActive)
         // Wait till prepared & Then invoke the animations
         setTimeout(() => {
-            transitionHandlers.switch(show.value);
-            if (show.value) animate.enter();
-            else animate.leave();
-        }, 1);
+            transitionHandlers.switch(show.value)
+            if (show.value) animate.enter()
+            else animate.leave()
+        }, 1)
     },
     start: (e) => { // 触发
-        if (transitionHandlers.filter(e)) return;
-        isMoving = true;
+        if (transitionHandlers.filter(e)) return
+        isMoving = true
     },
     cancel: (e) => { // 中断 此情景即方向中转
-        if (transitionHandlers.filter(e)) return;
+        if (transitionHandlers.filter(e)) return
     },
     end: (e) => { // 结束
-        if (transitionHandlers.filter(e)) return;
-        transitionHandlers.reset(show.value);
-        content.value.style.visibility = show.value ? displays.normal : displays.hidden;
-        container.value.classList.remove(classActive);
-        isMoving = false;
+        if (transitionHandlers.filter(e)) return
+        transitionHandlers.reset(show.value)
+        content.value.style.visibility = show.value ? displays.normal : displays.hidden
+        container.value.classList.remove(classActive)
+        isMoving = false
     }
-};
-const classAdd = (_name) => content.value.classList.add(_name);
-// const classDel = (_name) => content.value.classList.remove(_name);
-const classRep = (_name, _name_new) => content.value.classList.replace(_name, _name_new);
+}
+const classAdd = (_name) => content.value.classList.add(_name)
+// const classDel = (_name) => content.value.classList.remove(_name)
+const classRep = (_name, _name_new) => content.value.classList.replace(_name, _name_new)
 const animate = {
     enter: () => classRep(states.hide, states.show),
     leave: () => classRep(states.show, states.hide)
 }
 
 onMounted(() => {
-    watch(show, handlerSwitch);
-    initTrans();
-    container.value.addEventListener("transitionstart", transitionHandlers.start);
-    container.value.addEventListener("transitioncancel", transitionHandlers.cancel);
-    container.value.addEventListener("transitionend", transitionHandlers.end);
-});
+    watch(show, handlerSwitch)
+    initTrans()
+    container.value.addEventListener("transitionstart", transitionHandlers.start)
+    container.value.addEventListener("transitioncancel", transitionHandlers.cancel)
+    container.value.addEventListener("transitionend", transitionHandlers.end)
+})
 </script>
 
 <style lang="scss" scoped>

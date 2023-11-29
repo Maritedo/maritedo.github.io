@@ -8,19 +8,19 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref } from 'vue'
 defineProps({
     checked: {
         type: Boolean
     }
-});
+})
 defineOptions({
     inheritAttrs: false
-});
+})
 const $emits = defineEmits([
     'update:checked'
-]);
-const inputBox = ref(null);
+])
+const inputBox = ref(null)
 
 const handlerChange = () => {
     $emits('update:checked', inputBox.value.checked)

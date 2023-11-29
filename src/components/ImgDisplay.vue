@@ -1,6 +1,6 @@
 <template>
     <div class="container" ref="container">
-        <div v-for="val in vals" class="item">{{ val }}</div>
+        <div v-for="val in vals" class="item" :key="val">{{ val }}</div>
     </div>
     <span>
         <button @click="toLeft()">&leftarrow;</button>
@@ -10,23 +10,23 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue';
-const vals = ref(['a', 'bb', 'ccc', 'dddd', 'eeeee', 'ffffff']);
-const index = ref(0), count = vals.value.length;
-const container = ref();
+import { onMounted, ref, watch } from 'vue'
+const vals = ref(['a', 'bb', 'ccc', 'dddd', 'eeeee', 'ffffff'])
+const index = ref(0), count = vals.value.length
+const container = ref()
 const toLeft = () => {
-    index.value = (count + index.value - 1) % count;
+    index.value = (count + index.value - 1) % count
 }
 const toRight = () => {
-    index.value = (index.value + 1) % count;
+    index.value = (index.value + 1) % count
 }
 onMounted(() => {
     watch(index, (newId, oldId) => {
-        container.value.children[newId].classList.add('on');
+        container.value.children[newId].classList.add('on')
         if (oldId)
-            container.value.children[oldId].classList.remove('on');
-    }, { immediate: true });
-});
+            container.value.children[oldId].classList.remove('on')
+    }, { immediate: true })
+})
 </script>
 
 <style lang="scss" scoped>

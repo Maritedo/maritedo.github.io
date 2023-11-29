@@ -33,7 +33,7 @@ defineEmits([
     'change'
 ])
 
-const name = `_navBar_${index++}`;
+const name = `_navBar_${index++}`
 
 const onClick = (e) => {
     e.target.parentElement.click()

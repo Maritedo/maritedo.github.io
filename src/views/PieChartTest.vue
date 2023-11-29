@@ -22,15 +22,15 @@
 </template>
 
 <script setup>
-const useAlt = ref(false);
-const padding = ref(0.5);
-const size = ref(512);
+const useAlt = ref(false)
+const padding = ref(0.5)
+const size = ref(512)
 const data = ref([
   { name: "VeryVeryVeryVeryLongNameForTest", value: 7 },
   { name: "Short", value: 1 }
-]);
-const pie = ref();
-const msg = ref("");
+])
+const pie = ref()
+const msg = ref("")
 </script>
 
 <style lang="scss" scoped>

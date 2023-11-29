@@ -7,7 +7,7 @@
 <script setup>
 import { onMounted, computed, ref, watch } from 'vue'
 import { HandledCanvas } from '../scripts/verication.js'
-import { propIsTrue, getDPI } from '../scripts/common.js';
+import { propIsTrue, getDPI } from '../scripts/normal.ts'
 
 const props = defineProps({
     length: {
@@ -31,40 +31,40 @@ const props = defineProps({
 })
 
 const check = (str) => {
-    return handledCanvas.check(str);
+    return handledCanvas.check(str)
 }
 
 defineExpose({
     check
 })
 
-var padding, height, width, _fontH, _fontW, handledCanvas, /** @type {CanvasRenderingContext2D}*/ctx;
-const canvas = ref(null);
-const useDebug = computed(() => propIsTrue(props.debug));
-const useAnim = computed(() => propIsTrue(props.anim));
-const useInfo = computed(() => propIsTrue(props.info));
-const useCache = computed(() => propIsTrue(props.cache));
-const dpi = ref(null);
+var padding, height, width, _fontH, _fontW, handledCanvas, /** @type {CanvasRenderingContext2D}*/ctx
+const canvas = ref(null)
+const useDebug = computed(() => propIsTrue(props.debug))
+const useAnim = computed(() => propIsTrue(props.anim))
+const useInfo = computed(() => propIsTrue(props.info))
+const useCache = computed(() => propIsTrue(props.cache))
+const dpi = ref(null)
 
 const resizeCvs = () => {
-    let cvs = canvas.value;
-    cvs.style.width = width + 'px';
-    cvs.style.height = height + 'px';
+    let cvs = canvas.value
+    cvs.style.width = width + 'px'
+    cvs.style.height = height + 'px'
     dpiFit()
 }
 const dpiFit = () => {
-    let cvs = canvas.value;
-    cvs.width = Math.ceil(width * dpi.value);
-    cvs.height = Math.ceil(height * dpi.value);
+    let cvs = canvas.value
+    cvs.width = Math.ceil(width * dpi.value)
+    cvs.height = Math.ceil(height * dpi.value)
 }
 
 const updateDPI = () => {
-    var old = dpi.value;
+    var old = dpi.value
     if ((dpi.value = getDPI(ctx)) != old) {
-        ctx.setTransform(dpi.value, 0, 0, dpi.value, 0, 0);
-        return true;
+        ctx.setTransform(dpi.value, 0, 0, dpi.value, 0, 0)
+        return true
     }
-    else return false;
+    else return false
 }
 const refreshCode = () => {
     handledCanvas.refreshCode({ length: props.length, height, width, padding, _fontH, _fontW, dpi: dpi.value })
@@ -75,60 +75,60 @@ const redrawCode = () => {
 }
 
 onMounted(() => {
-    ctx = canvas.value.getContext('2d');
-    updateDPI();
-    handledCanvas = new HandledCanvas(canvas.value, ctx);
+    ctx = canvas.value.getContext('2d')
+    updateDPI()
+    handledCanvas = new HandledCanvas(canvas.value, ctx)
     watch(() => props.size, () => {
-        fullResize();
-        resizeCvs();
+        fullResize()
+        resizeCvs()
     })
     watch(() => props.length, () => {
-        width = 2 * padding + props.length * _fontW;
-        resizeCvs();
+        width = 2 * padding + props.length * _fontW
+        resizeCvs()
     })
     const fullResize = () => {
-        padding = props.size * 0.1;
-        height = props.size;
-        _fontH = props.size * 0.8;
-        _fontW = props.size * 0.48;
-        width = 2 * padding + props.length * _fontW;
+        padding = props.size * 0.1
+        height = props.size
+        _fontH = props.size * 0.8
+        _fontW = props.size * 0.48
+        width = 2 * padding + props.length * _fontW
         resizeCvs()
     }
-    fullResize();
-    refreshCode();
+    fullResize()
+    refreshCode()
 
-    handledCanvas.debug = useDebug.value;
-    handledCanvas.info = useInfo.value;
-    handledCanvas.cache = useCache.value;
+    handledCanvas.debug = useDebug.value
+    handledCanvas.info = useInfo.value
+    handledCanvas.cache = useCache.value
     if ((handledCanvas.anim = useAnim.value)) {
-        handledCanvas.setupAnim({ length: props.length, height, width, padding, _fontH, _fontW, dpi: dpi.value }).animRefresh();
+        handledCanvas.setupAnim({ length: props.length, height, width, padding, _fontH, _fontW, dpi: dpi.value }).animRefresh()
     }
     watch(useDebug, (_debug) => {
-        handledCanvas.debug = _debug;
-        redrawCode();
-    });
+        handledCanvas.debug = _debug
+        redrawCode()
+    })
     watch(useAnim, (_anim) => {
-        handledCanvas.anim = _anim;
+        handledCanvas.anim = _anim
         if (_anim) {
-            handledCanvas.setupAnim({ length: props.length, height, width, padding, _fontH, _fontW, dpi: dpi.value }).animRefresh();
+            handledCanvas.setupAnim({ length: props.length, height, width, padding, _fontH, _fontW, dpi: dpi.value }).animRefresh()
         }
-    });
+    })
     watch(useInfo, (_info) => {
-        handledCanvas.info = _info;
-        redrawCode();
-    });
+        handledCanvas.info = _info
+        redrawCode()
+    })
     watch(useCache, (_cache) => {
-        handledCanvas.cache = _cache;
-    });
+        handledCanvas.cache = _cache
+    })
     window.addEventListener('resize', () => {
         if (updateDPI()) {
-            fullResize();
+            fullResize()
             if (useAnim.value)
-                handledCanvas.setupAnim({ length: props.length, height, width, padding, _fontH, _fontW, dpi: dpi.value });
+                handledCanvas.setupAnim({ length: props.length, height, width, padding, _fontH, _fontW, dpi: dpi.value })
             else
-                refreshCode();
+                refreshCode()
         }
-    });
+    })
 })
 </script>
 
