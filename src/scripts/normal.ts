@@ -1,12 +1,11 @@
 import { h } from 'vue'
 import { RouterLink, type RouteRecordRaw, type RouteRecordName } from 'vue-router'
 import { type MenuOption, NIcon } from 'naive-ui'
-
 import type { AllowedComponentProps, ComponentCustomProps, ComponentOptionsMixin, DefineComponent, EmitsOptions, VNodeProps } from 'vue'
 
 export const renderIcon = (icon: any) => {
   return () => h(NIcon, null, { default: () => h(icon) })
-}
+} 
 
 export const renderLink = (label: string, to: RouteRecordName | undefined, key = to) => {
   return {
@@ -30,23 +29,21 @@ export const getArgs = () => {
   return args
 }
 
-
 export const simulateClick = (ele: HTMLElement) => {
   ele.dispatchEvent(new PointerEvent("click", {
     view: window,
     bubbles: false,
-    cancelable: true,
+    cancelable: true
   }))
 }
-
 
 export type ExtendedRecord = RouteRecordRaw & {
   meta?: {
     title: string,
+    icon?: DefineComponent<{}, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, EmitsOptions, string, VNodeProps & AllowedComponentProps & ComponentCustomProps, Readonly<any>, {}, {}>,
     menuDefault?: boolean,
     menuGroup?: boolean,
-    epAlive?: boolean,
-    icon?: DefineComponent<{}, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, EmitsOptions, string, VNodeProps & AllowedComponentProps & ComponentCustomProps, Readonly<any>, {}, {}>,
+    keepAlive?: boolean,
     [key: string]: any
   },
   page?: () => Promise<any>,
@@ -76,11 +73,10 @@ export const genMenuOptions = (records: ExtendedRecord[]): MenuOption[] => {
 }
 
 export const propIsTrue = (val: string | boolean | null) => {
-  if (typeof (val) == 'string') {
+  if (typeof (val) == 'string')
     return (val == '' || val.toLowerCase() == 'true')
-  } else {
+  else
     return val === null ? false : val
-  }
 }
 
 export const addClassTo = (element: HTMLElement) => (className: string) => element.classList.add(className)

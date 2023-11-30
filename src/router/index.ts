@@ -5,7 +5,7 @@ import { Albums, FishOutline, Home } from '@vicons/ionicons5'
 const legacy = true
 const useHash = import.meta.env.MODE !== 'development' && legacy
 const baseUrl = import.meta.env.BASE_URL
-const defaultTitle = 'Unnamed'
+const defaultTitle = '未命名'
 
 export const getDisplayNames = (names: string[]): { original: string, display: string }[] => {
   const result: { original: string, display: string }[] = []
@@ -73,6 +73,7 @@ export const routes: ExtendedRecord[] = (function _(datas: ExtendedRecord[]) {
             path: 'emm',
             component: () => import('@/views/TestMulti.vue'),
             meta: {
+              keepAlive: true,
               title: '测试其一·嵌套'
             }
           }

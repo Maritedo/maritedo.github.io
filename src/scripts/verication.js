@@ -16,63 +16,66 @@ const renderStyle = {
 }
 
 class HandledCanvas {
-    /**@type {string[]} */
-    code
+    /**@type {string[] | undefined} */
+    code = "aaa"
+    /**@type {{offset: { x: number, y: number }, angle: number, ctx: { fillStyle: string, font: string }, box: { top: number, bottom: number, left: number, right: number }}[] | undefined} */
     data
-    /**@type {HTMLCanvasElement } */
+    /**@type {HTMLCanvasElement} */
     canvas
+    /**@type {CanvasRenderingContext2D} */
     ctx
     anim = true
     info = false
     debug = false
+
     /**
-     * 
-     * @param {HTMLCanvasElement} canvas 
+     * 构造画布接管对象
+     * @param {HTMLCanvasElement} canvas
+     * @param {CanvasRenderingContext2D} ctx
      */
     constructor(canvas, ctx = canvas.getContext('2d')) {
         this.canvas = canvas
         this.ctx = ctx
     }
 
+    /**
+     * 校验验证码
+     * @param {string} str 
+     */
     check(str) {
         return str == this.code
     }
 
-    generateCode = ({ length, _fontH, _fontW }) => {
-        var { _code, _data } = generate(
+    /**
+     * 生成新的验证码
+     * @param {{ length: number, _fontH: number, _fontW: number }} config 
+     */
+    generateCode(config) {
+        ({ code: this.code, data: this.data } = generate(
             this.ctx,
-            {
-                length,
-                _fontH,
-                _fontW
-            },
+            config,
             this.debug
-        )
-        this.code = _code
-        this.data = _data
+        ))
     }
 
+    /**@type {number[]}*/
     delay = []
     dateMs = Date.now()
     fpsRec = 0
     delayRec = 0
-    redrawCode = ({ height, width, padding, _fontW, dpi }) => {
+
+    /**
+     * 重新绘制验证码
+     * @param {{ height: number, width: number, padding: number, _fontW: number, dpi: number }} config 
+     */
+    redrawCode(config) {
+        const { height, padding, dpi } = config
         sizeFit(this.ctx, dpi)
-        draw(
-            this.ctx,
-            {
-                height,
-                width,
-                padding,
-                _fontW,
-                code: this.code,
-                data: this.data
-            },
-            this.debug
-        )
+        Object.assign(config, { code: this.code, data: this.data })
+        draw(this.ctx, config, this.debug)
         if (this.info) {
-            var _date = Date.now()
-            var _delay = _date - this.dateMs
+            const _date = Date.now()
+            const _delay = _date - this.dateMs
             this.dateMs = _date
             this.delay.push(_delay)
             this.ctx.font = `${~~(0.8 * padding)}px sans`
@@ -80,13 +83,13 @@ class HandledCanvas {
             this.ctx.textBaseline = "middle"
             this.ctx.fillStyle = "#f00"
 
-            const la = 30
-            if (this.delay.length == la) {
-                var sum = 0, _val
+            const queneLength = 30
+            if (this.delay.length == queneLength) {
+                let sum = 0, _val
                 while ((_val = this.delay.pop()))
                     sum += _val
-                this.delayRec = Math.round(sum / la)
-                this.fpsRec = Math.round(la * 10000 / sum) / 10
+                this.delayRec = Math.round(sum / queneLength)
+                this.fpsRec = Math.round(queneLength * 10000 / sum) / 10
             }
             this.ctx.fillText(`渲染延时: ${this.delayRec}ms`, padding + 4, padding / 2)
             this.ctx.fillText(`FPS: ${this.fpsRec}`, padding + 4, height - padding / 2)
@@ -94,19 +97,27 @@ class HandledCanvas {
     }
 
     storedData
-    refreshCode = ({ length, height, width, padding, _fontH, _fontW, dpi }) => {
-        this.generateCode({ length, _fontH, _fontW })
-        this.redrawCode({ height, width, padding, _fontW, dpi })
+    /**
+     * 刷新
+     * @param {{ length: number, height: number, width: number, padding: number, _fontH: number, _fontW: number, dpi: number }} config 
+     */
+    refreshCode = (config) => {
+        this.generateCode(config)
+        this.redrawCode(config)
     }
 
-    setupAnim = ({ length, height, width, padding, _fontH, _fontW, dpi }) => {
+    /**
+     * 初始化并启动连续刷新
+     * @param {{ length: number, height: number, width: number, padding: number, _fontH: number, _fontW: number, dpi: number }} config 
+     */
+    setupAnim = (config) => {
+        const { length, height, width, padding, _fontH, _fontW, dpi } = config
         this.storedData = { length, height, width, padding, _fontH, _fontW, dpi }
         return this
     }
     animRefresh = () => {
-        var { length, height, width, padding, _fontH, _fontW, dpi } = this.storedData
-        this.generateCode({ length, _fontH, _fontW })
-        this.redrawCode({ height, width, padding, _fontW, dpi })
+        this.generateCode(this.storedData)
+        this.redrawCode(this.storedData)
         if (this.anim) requestAnimationFrame(this.animRefresh)
     }
 }
@@ -114,6 +125,7 @@ class HandledCanvas {
 /**
  * 
  * @param {CanvasRenderingContext2D} ctx 
+ * @param {number} dpi
  */
 const sizeFit = (ctx, dpi) => {
     ctx.setTransform(dpi, 0, 0, dpi, 0, 0)
@@ -122,9 +134,10 @@ const sizeFit = (ctx, dpi) => {
 /**
  * 
  * @param {CanvasRenderingContext2D} ctx 
- * @param {{ width, height }} config 
+ * @param {{ width: number, height: number }} config 
  */
-const clear = (ctx, { width, height }) => {
+const clear = (ctx, config) => {
+    const { width, height } = config
     ctx.fillStyle = 'rgb(0, 0, 0)'
     ctx.fillRect(0, 0, width, height)
 }
@@ -132,17 +145,17 @@ const clear = (ctx, { width, height }) => {
 /**
  * 
  * @param {CanvasRenderingContext2D} _ctx 
- * @param {{ width, height, padding, _fontW }} config 
+ * @param {{ width: number, height: number, padding: number, _fontW: number }} config 
  */
-const grid = (_ctx, { width, height, padding, _fontW, code }) => {
+const grid = (_ctx, config) => {
     _ctx.save()
+    const { width, height, padding, _fontW, code } = config
     Object.assign(_ctx, gridStyle)
-    var length = code.length
-    var axis = {
-        x: [],
+    const length = code.length
+    const axis = {
+        x: [0],
         y: [0, padding, height - padding, height]
     }
-    axis.x.push(0)
     for (let _i = 0; _i <= length; _i++)
         axis.x.push(_i * _fontW + padding)
     axis.x.push(width)
@@ -154,7 +167,7 @@ const grid = (_ctx, { width, height, padding, _fontW, code }) => {
                     axis.y[py],
                     axis.x[px + 1] - axis.x[px],
                     axis.y[py + 1] - axis.y[py])
-    var lines = [
+    const lines = [
         [[0, padding],
         [width, padding]],
         [[0, height - padding],
@@ -175,25 +188,26 @@ const grid = (_ctx, { width, height, padding, _fontW, code }) => {
 /**
  * 
  * @param {CanvasRenderingContext2D} ctx 
- * @param {{length, _fontH, _fontW}} config 
+ * @param {{ length: number, _fontH: number, _fontW: number }} config 
  * @param {boolean} useDebug 
  * @returns 
  */
-const generate = (ctx, { length, _fontH, _fontW }, useDebug = false) => {
+const generate = (ctx, config, useDebug = false) => {
     ctx.save()
-    var code = "", data = []
+    const { length, _fontH, _fontW } = config
+    let code = "", data = []
     ctx.textAlign = "center"
     ctx.textBaseline = "middle"
     for (let i = 0; i < length; i++) {
         ctx.save()
-        var code_char = random.char(),
+        const code_char = random.char(),
             code_offset = random.offset(_fontH, _fontW),
             code_angle = random.angle(),
             code_fill = random.color(useDebug),
             code_font = `${~~random.size(_fontH)}px ${random.font()}`
         code += code_char
         ctx.font = code_font
-        var measures = ctx.measureText(code_char)
+        const measures = ctx.measureText(code_char)
         data.push({
             offset: code_offset,
             angle: code_angle,
@@ -211,33 +225,34 @@ const generate = (ctx, { length, _fontH, _fontW }, useDebug = false) => {
         ctx.restore()
     }
     ctx.restore()
-    return { _code: code, _data: data }
+    return { code, data }
 }
 /**
  * Draw elements onto the provided canvas
  * @param {CanvasRenderingContext2D} ctx 
- * @param {{width, height, padding, _fontW, code, data}}
+ * @param {{width: number, height: number, padding: number, _fontW: number, code: string, data: {offset: { x: number, y: number }, angle: number, ctx: { fillStyle: string, font: string }, box: { top: number, bottom: number, left: number, right: number }}[] | undefined}} config
  * @param {boolean} useDebug 
  */
-const draw = (ctx, { width, height, padding, _fontW, code, data }, useDebug = false) => {
+const draw = (ctx, config, useDebug = false) => {
     ctx.save()
-    var length = code.length
+    const { width, height, padding, _fontW, code, data } = config
+    const length = code.length
     clear(ctx, { width, height })
     useDebug && grid(ctx, { width, height, padding, _fontW, code })
-    var curX = padding + 0.5 * _fontW
+    let curX = padding + 0.5 * _fontW
     for (let i = 0; i < length; i++) {
-        var code_ch = code[i],
+        const code_ch = code[i],
             { offset, angle, box } = data[i],
             { top, bottom, left, right } = box,
             _w = left + right, _h = top + bottom
-        var { r: _r, theta: _theta } = Pol(curX + offset.x, height / 2 + offset.y)
-        var fixed = Rec(_r, _theta - angle)
+        const { r: _r, theta: _theta } = Pol(curX + offset.x, height / 2 + offset.y)
+        const fixed = Rec(_r, _theta - angle)
 
         ctx.save()
         Object.assign(ctx, renderStyle)
         ctx.rotate(angle)
         if (useDebug) {
-            var lx = fixed.x - _w * 0.5, rx = lx + _w, // x - left & right
+            let lx = fixed.x - _w * 0.5, rx = lx + _w, // x - left & right
                 ty = fixed.y - _h * 0.5, by = ty + _h  // y - top & bottom
             // BOX
             ctx.fillRect(

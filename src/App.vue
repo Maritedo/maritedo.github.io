@@ -15,7 +15,6 @@
                     {{ name.display }}
                   </router-link>
                 </n-breadcrumb-item>
-
               </transition>
             </n-breadcrumb>
           </template>
@@ -40,7 +39,7 @@
           <n-menu ref="menuRef" :options="menuOptions" :default-expanded-keys="defaultExpandedKeys" :value="curPage"
             class="i-menu" />
         </n-layout-sider>
-        <n-layout-content class="n-content" :native-scrollbar="false">
+        <n-layout-content class="n-content router-root" :native-scrollbar="false">
           <router-view v-slot="{ Component, route }">
             <transition name="fade">
               <keep-alive v-if="$route.meta.keepAlive">
@@ -78,9 +77,9 @@ const theme = computed<GlobalTheme | null>(() => {
   return useDark.value ? darkTheme : null
 })
 const onBreadcurmbClick = (e: PointerEvent) => {
+  console.log(e)
   const element = e.target as HTMLElement
-  console.log(element)
-  if (element.tagName !== 'span') return
+  if (e instanceof HTMLSpanElement) return
   const a = element.querySelector('a')
   a && simulateClick(a)
   // router.push(element.querySelector('a')?.getAttribute('href') || '')
@@ -186,5 +185,10 @@ onMounted(() => {
 <style lang="scss">
 .breadcrumb-leave-active:nth-last-child(2)>span:last-child {
   display: none;
+}
+
+.router-root .n-scrollbar-content {
+  width: 100%;
+  height: 100%;
 }
 </style>
