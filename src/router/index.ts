@@ -64,14 +64,24 @@ export const menu = [
         // page: () => ,
         children: [
           {
-            path: 'colors',
-            name: 'colors',
+            path: 'distinguish',
+            name: 'distinguish',
             meta: {
               title: '辩色龙',
               icon: ColorPalette,
               keepAlive: true
             },
             component: () => import('@/views/dev/undone/ColorGame.vue')
+          },
+          {
+            path: 'colors',
+            name: 'colors',
+            meta: {
+              title: '调色板',
+              icon: ColorPalette,
+              keepAlive: true
+            },
+            component: () => import('@/views/dev/undone/ColorPalette.vue')
           }
         ]
       }
@@ -126,7 +136,7 @@ export const routes: ExtendedRecord[] = (function (...v: ExtendedRecord[][]) {
           component: data.page,
           meta: {
             title: data.meta?.title || defaultTitle,
-            menuDefault: true
+            virtual: true
           }
         })
     return datas

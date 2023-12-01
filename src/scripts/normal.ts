@@ -3,24 +3,26 @@ import { RouterLink, type RouteRecordRaw, type RouteRecordName } from 'vue-route
 import { type MenuOption, NIcon, type MenuDividerOption, type MenuGroupOption } from 'naive-ui'
 import type { AllowedComponentProps, ComponentCustomProps, ComponentOptionsMixin, DefineComponent, EmitsOptions, VNodeProps } from 'vue'
 
-export const renderActionOption = (title: string, callback: (e: PointerEvent) => {}) =>
-  () => h('a', {
+export function renderActionOption(title: string, callback?: (e: PointerEvent) => {}) {
+  return () => h('a', {
     onclick: (e: PointerEvent) => {
       e.preventDefault()
-      callback(e)
+      callback && callback(e)
     }
   },
     title
   )
+}
 
-export const renderIcon = (icon: any) => {
+export function renderIcon(icon: any) {
   return () => h(NIcon, null, { default: () => h(icon) })
 }
 
-export const renderLink = (label: string, to: RouteRecordName | undefined, key = to) => ({
-  label: () => h(RouterLink, { to: { name: to } }, { default: () => label }),
-  key: String(key)
-})
+
+export function renderLink(label: string, to: RouteRecordName | undefined) {
+  return () => h(RouterLink, { to: { name: to } }, { default: () => label })
+}
+
 
 export const configureThemeColor = (color: string) => {
   document.querySelectorAll('meta[name="theme-color"]').forEach((meta) => {
@@ -48,6 +50,7 @@ export const simulateClick = (ele: HTMLElement) => {
 export type ExtendedRecord = RouteRecordRaw & {
   meta?: {
     title: string,
+    virtual?: boolean,
     icon?: DefineComponent<{}, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, EmitsOptions, string, VNodeProps & AllowedComponentProps & ComponentCustomProps, Readonly<any>, {}, {}>,
     menuDefault?: boolean,
     menuGroup?: boolean,
@@ -62,23 +65,13 @@ export const genMenuOptions = (records: ExtendedRecord[]): Array<MenuOption | Me
   const result = new Array<MenuOption | MenuDividerOption | MenuGroupOption>
   for (const route of records) {
     const m = route.meta
-    if (m && !m.menuDefault) {
-      const hasLink = !!route.name
-      const hasChild = route.children && route.children.length
-      const hasIcon = !!m.icon
-      
-      const link = renderLink(m.title, route.name)
-      const option: MenuOption = {
-        label: link.label,
-        key: link.key,
-        
-      }
-      if (m.icon)
-        option.icon = renderIcon(m.icon)
-      if (route.children)
-        option.children = genMenuOptions(route.children)
-      result.push(option)
-    }
+    if (m && !m.virtual)
+      result.push({
+        label: route.name ? renderLink(m.title, route.name) : h('p', String(route.name)),
+        key: String(route.name),
+        icon: m.icon ? renderIcon(m.icon) : undefined,
+        children: route.children && route.children.length ? genMenuOptions(route.children) : undefined
+      })
   }
   return result
 }

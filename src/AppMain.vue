@@ -73,9 +73,9 @@ import type { MenuOption, NBreadcrumb } from 'naive-ui'
 import {
   Moon as MoonIcon,
   Sunny as SunIcon,
-  PersonCircle
+  //PersonCircle
 } from '@vicons/ionicons5'
-import { RouterView, useRouter } from 'vue-router'
+import { RouterView, useRouter, type RouteLocationNormalized } from 'vue-router'
 import { menu, action, getDisplayNames } from '@/router/index'
 import { useConfigStore as useConfigs } from '@/stores/configs'
 import { configureThemeColor, simulateClick, genMenuOptions as genMenu, type ExtendedRecord } from '@/scripts/normal'
@@ -91,31 +91,47 @@ const appConfig = useConfigs()
 const appRouter = useRouter()
 const appNotify = useNotification()
 
-appRouter.beforeEach((to) => {
+appRouter.beforeEach((to: RouteLocationNormalized) => {
+  let handledName: string | undefined = undefined
   const nav = (v: Ref, t: Ref<any>) => {
     if (v.value && to.name && !(to.name in v.value.activePath))
-      v.value.showOption(to.name)
-    t.value = to.name
+      v.value.showOption(handledName)
+    t.value = handledName
     setTimeout(() => {
       section.value = v.value?.activePath || []
     })
   }
+  enum loc {
+    NOTFOUND,
+    FOUND,
+    VIRTUAL
+  }
   curPage.value = curAction.value = null;
   switch (([action, menu]).find((v) => {
-    return (function _(vals: ExtendedRecord[]) {
+    return (function _(vals: ExtendedRecord[]): loc {
       for (const val of vals) {
-        if (val.name == to.name) return true
-        else if (val.children && _(val.children)) return true
+        if (val.name == to.name) {
+          if (val.meta?.virtual)
+            return loc.VIRTUAL
+          handledName = String(val.name)
+          return loc.FOUND
+        }
+        else if (val.children) {
+          const i = _(val.children)
+          if (i == loc.VIRTUAL)
+            handledName = String(val.name)
+          if (i != loc.NOTFOUND)
+            return loc.FOUND
+        }
       }
-      return false
-    })(v)
+      return loc.NOTFOUND
+    })(v) != loc.NOTFOUND
   })) {
     case action: nav(actionRef, curAction); break;
     case menu: nav(menuRef, curPage); break;
   }
   return to.name ? appRouter.hasRoute(to.name) : false
 })
-
 
 const menuOptions: MenuOption[] = genMenu(menu)
 const actionsOptions: MenuOption[] = genMenu(action)
@@ -193,6 +209,7 @@ onMounted(() => {
   .i-actions {
 
     .i-action-menu {
+      text-align: left;
       width: 100%;
     }
 
