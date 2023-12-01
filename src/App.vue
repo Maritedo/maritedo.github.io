@@ -17,7 +17,7 @@ const initDefaultConfig = () => {
 
 onMounted(() => {
     if (appConfig.firstRun) {
-        appConfig.firstRun = false
+        // appConfig.firstRun = false
         initDefaultConfig()
     }
 })

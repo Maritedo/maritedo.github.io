@@ -1,15 +1,21 @@
 <template>
   <n-config-provider fullH :theme="appConfig.curTheme">
     <n-layout class="n-container" content-style="display: flex; flex-direction: column;" fullH>
-      <n-layout-header class="n-header" bordered @click.prevent style="box-shadow: var(--box-shadow-1);">
+      <n-layout-header
+        class="n-header"
+        bordered
+        @click.prevent
+        style="box-shadow: var(--box-shadow-1)"
+      >
         <n-page-header @back="appRouter.go(-1)">
           <template #title>
             <n-breadcrumb class="breadcrumb">
-              <n-breadcrumb-item :clickable="false">
-                测试应用
-              </n-breadcrumb-item>
-              <transition name="breadcrumb" v-for="(name, index) in getDisplayNames(menuRef?.activePath || [])"
-                :key="index">
+              <n-breadcrumb-item :clickable="false"> 测试应用 </n-breadcrumb-item>
+              <transition
+                name="breadcrumb"
+                v-for="(name, index) in getDisplayNames(menuRef?.activePath || [])"
+                :key="index"
+              >
                 <n-breadcrumb-item :key="name.original" @click.prevent="onBreadcurmbClick">
                   <router-link :to="{ name: name.original }">
                     {{ name.display }}
@@ -19,7 +25,11 @@
             </n-breadcrumb>
           </template>
           <template #extra>
-            <n-switch :rail-style="dayNightRail" :value="appConfig.useDark" @update:value="appConfig.changeTheme()">
+            <n-switch
+              :rail-style="dayNightRail"
+              :value="appConfig.useDark"
+              @update:value="appConfig.changeTheme()"
+            >
               <template #checked>
                 <n-icon size="large">
                   <MoonIcon />
@@ -36,8 +46,13 @@
       </n-layout-header>
       <n-layout class="n-main" has-sider>
         <n-layout-sider class="n-sider" collapse-mode="width" bordered show-trigger>
-          <n-menu ref="menuRef" :options="menuOptions" :default-expanded-keys="defaultExpandedKeys" :value="curPage"
-            class="i-menu" />
+          <n-menu
+            ref="menuRef"
+            :options="menuOptions"
+            :default-expanded-keys="defaultExpandedKeys"
+            :value="curPage"
+            class="i-menu"
+          />
         </n-layout-sider>
         <n-layout-content class="n-content router-root" :native-scrollbar="false">
           <router-view v-slot="{ Component, route }">
@@ -58,10 +73,7 @@
 import { type Ref, ref, computed, watch, onMounted } from 'vue'
 import { useNotification, useThemeVars, darkTheme, NMenu } from 'naive-ui'
 import type { MenuOption, NBreadcrumb } from 'naive-ui'
-import {
-  Moon as MoonIcon,
-  Sunny as SunIcon,
-} from '@vicons/ionicons5'
+import { Moon as MoonIcon, Sunny as SunIcon } from '@vicons/ionicons5'
 import { RouterView, useRouter } from 'vue-router'
 import { routes, getDisplayNames } from '@/router/index'
 import { useConfigStore as useConfigs } from '@/stores/configs'
@@ -98,13 +110,21 @@ const dayNightRail = (info: any) => ({
 })
 
 onMounted(() => {
-  appNotify.info({
-    content: "你好！",
-    duration: 3000
-  })
-  watch(computed(() => appConfig.useDark), (v) => {
-    configureThemeColor(v ? darkTheme.common.baseColor : themeVars.value.baseColor)
-  }, { immediate: true })
+  if (appConfig.firstRun) {
+    appConfig.firstRun = false
+    appNotify.info({
+      content: '你好！',
+      duration: 2560
+    })
+  } else appConfig.firstRun = true
+  watch(
+    computed(() => appConfig.useDark),
+    (v) => {
+      const themeColor = v ? darkTheme.common.baseColor : themeVars.value.baseColor
+      configureThemeColor(themeColor)
+    },
+    { immediate: true }
+  )
 })
 </script>
 
@@ -128,7 +148,6 @@ onMounted(() => {
   }
 }
 
-
 .i-content {
   width: 100%;
   height: 100%;
@@ -147,7 +166,7 @@ onMounted(() => {
 
 .fade-leave-active,
 .fade-enter-active {
-  transition: all .2s ease;
+  transition: all 0.2s ease;
   position: absolute;
 }
 
@@ -179,7 +198,7 @@ onMounted(() => {
 
 .breadcrumb-leave-active,
 .breadcrumb-enter-active {
-  transition: all .2s ease;
+  transition: all 0.2s ease;
 }
 
 .breadcrumb-leave-active {
@@ -188,7 +207,7 @@ onMounted(() => {
 </style>
 
 <style lang="scss">
-.breadcrumb-leave-active:nth-last-child(2)>span:last-child {
+.breadcrumb-leave-active:nth-last-child(2) > span:last-child {
   display: none;
 }
 
