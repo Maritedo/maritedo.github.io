@@ -99,7 +99,8 @@ const dayNightRail = (info: any) => ({
 
 onMounted(() => {
   appNotify.info({
-    content: "你好！"
+    content: "你好！",
+    duration: 3000
   })
   watch(computed(() => appConfig.useDark), (v) => {
     configureThemeColor(v ? darkTheme.common.baseColor : themeVars.value.baseColor)
