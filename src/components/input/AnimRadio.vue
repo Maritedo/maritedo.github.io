@@ -17,7 +17,7 @@ defineOptions({
 </script>
 
 <style scoped>
-@import url("./general.css");
+@import url("./../../assets/general.css");
 
 /*未选中单框获得焦点或被悬停*/
 input[type="radio"]:not(:checked):hover + .checkbox::before,

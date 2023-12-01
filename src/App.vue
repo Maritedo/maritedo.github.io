@@ -7,7 +7,7 @@
 <script type="ts" setup>
 import AppMain from '@/AppMain.vue'
 import { useOsTheme } from 'naive-ui'
-import { useConfigStore } from './stores/configs';
+import { useConfigStore } from '@/stores/configs';
 
 const appConfig = useConfigStore()
 

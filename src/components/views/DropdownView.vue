@@ -26,9 +26,9 @@
 </script>
 
 <script setup>
-import { simulateClick, propIsTrue } from './../scripts/normal'
+import { simulateClick, propIsTrue } from '@/scripts/normal'
 import { onMounted, ref, watch } from 'vue'
-import IconDrop from './icon/IconDrop.vue'
+import IconDrop from '@/components/icon/IconDrop.vue'
 const props = defineProps({
     title: {
         default: ""

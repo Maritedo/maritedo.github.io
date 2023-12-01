@@ -26,7 +26,7 @@
 
 <script setup>
 import { computed, ref } from 'vue'
-import { randomColor, keepIn } from '../../scripts/normal'
+import { randomColor, keepIn } from '@/scripts/normal'
 const props = defineProps({
     datas: {
         default: [

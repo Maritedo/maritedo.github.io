@@ -1,6 +1,6 @@
 import { h } from 'vue'
 import { RouterLink, type RouteRecordRaw, type RouteRecordName } from 'vue-router'
-import { type MenuOption, NIcon } from 'naive-ui'
+import { type MenuOption, NIcon, type MenuDividerOption, type MenuGroupOption } from 'naive-ui'
 import type { AllowedComponentProps, ComponentCustomProps, ComponentOptionsMixin, DefineComponent, EmitsOptions, VNodeProps } from 'vue'
 
 export const renderActionOption = (title: string, callback: (e: PointerEvent) => {}) =>
@@ -58,17 +58,20 @@ export type ExtendedRecord = RouteRecordRaw & {
   children?: ExtendedRecord[],
 }
 
-export const genMenuOptions = (records: ExtendedRecord[]): MenuOption[] => {
-  const result = new Array<MenuOption>
+export const genMenuOptions = (records: ExtendedRecord[]): Array<MenuOption | MenuDividerOption | MenuGroupOption> => {
+  const result = new Array<MenuOption | MenuDividerOption | MenuGroupOption>
   for (const route of records) {
     const m = route.meta
     if (m && !m.menuDefault) {
-      const link = renderLink(
-        m.title,
-        (route.children && route.children[0].meta?.menuDefault) ? route.children[0].name : route.name)
+      const hasLink = !!route.name
+      const hasChild = route.children && route.children.length
+      const hasIcon = !!m.icon
+      
+      const link = renderLink(m.title, route.name)
       const option: MenuOption = {
         label: link.label,
-        key: link.key
+        key: link.key,
+        
       }
       if (m.icon)
         option.icon = renderIcon(m.icon)

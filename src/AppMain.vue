@@ -6,8 +6,7 @@
           <template #title>
             <n-breadcrumb class="breadcrumb">
               <n-breadcrumb-item :clickable="false"> 测试应用 </n-breadcrumb-item>
-              <transition name="breadcrumb" v-for="(name, index) in getDisplayNames(section)"
-                :key="index">
+              <transition name="breadcrumb" v-for="(name, index) in getDisplayNames(section)" :key="index">
                 <n-breadcrumb-item :key="name.original" @click.prevent="onBreadcurmbClick">
                   <router-link :to="{ name: name.original }">
                     {{ name.display }}
@@ -40,6 +39,15 @@
             <div class="i-actions">
               <n-menu ref="actionRef" class="i-action-menu" :options="actionsOptions" :value="curAction">
               </n-menu>
+              <!-- <n-space :wrap="false" :wrap-item="true" justify="space-between" class="i-action-shortcuts">
+                <n-button text strong secondary>
+                  <template #icon>
+                    <n-icon size="30px">
+                      <person-circle />
+                    </n-icon>
+                  </template>
+                </n-button>
+              </n-space> -->
             </div>
           </div>
         </n-layout-sider>
@@ -64,7 +72,8 @@ import { useNotification, useThemeVars, darkTheme, NMenu } from 'naive-ui'
 import type { MenuOption, NBreadcrumb } from 'naive-ui'
 import {
   Moon as MoonIcon,
-  Sunny as SunIcon
+  Sunny as SunIcon,
+  PersonCircle
 } from '@vicons/ionicons5'
 import { RouterView, useRouter } from 'vue-router'
 import { menu, action, getDisplayNames } from '@/router/index'
@@ -182,12 +191,17 @@ onMounted(() => {
   }
 
   .i-actions {
-    flex-direction: row;
-    display: flex;
-    align-items: flex-end;
 
     .i-action-menu {
       width: 100%;
+    }
+
+    .i-action-shortcuts {
+      height: 42px;
+      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
+      flex: 1;
     }
   }
 

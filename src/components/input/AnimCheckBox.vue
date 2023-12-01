@@ -32,7 +32,7 @@ const onClick = (e) => {
 </script>
 
 <style scoped>
-@import url("./general.css");
+@import url("./../../assets/general.css");
 
 /*未选中复选框获得焦点或被悬停*/
 input[type="checkbox"]:not(:checked):hover + .checkbox::before,

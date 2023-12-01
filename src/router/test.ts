@@ -1,4 +1,4 @@
-import { getDPI, Pol, Rec, between } from '../scripts/normal'
+import { getDPI, Pol, Rec, between } from '@/scripts/normal'
 
 export class Fabric {
     private _objects: FabricObj[]

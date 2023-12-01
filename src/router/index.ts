@@ -1,11 +1,13 @@
 import { createRouter, createWebHistory, createWebHashHistory, type RouteRecordRaw } from 'vue-router'
-import { type ExtendedRecord } from '../scripts/normal'
+import { type ExtendedRecord } from '@/scripts/normal'
 import {
-  Albums,
-  Fish,
+  Briefcase,
   Home,
   Settings,
-  InformationCircle
+  InformationCircle,
+  Flask,
+  ColorPalette,
+  Construct
 } from '@vicons/ionicons5'
 
 const legacy = true
@@ -41,45 +43,37 @@ export const menu = [
       title: "主页",
       icon: Home
     },
-    component: () => import('@/views/HomePage.vue')
+    component: () => import('@/views/PageHome.vue')
   },
   {
-    path: '/test',
-    name: 'test',
+    path: '/dev',
+    name: 'dev',
     meta: {
-      title: '测试集',
-      icon: Fish
+      title: '开发',
+      icon: Construct
     },
-    page: () => import('@/views/TestGroup.vue'),
+    page: () => import('@/views/GroupDev.vue'),
     children: [
       {
-        path: '1',
-        name: 'test1',
+        path: 'undone',
+        name: 'undone',
         meta: {
-          title: '测试其一',
-          keepAlive: true
+          title: '测试中项目',
+          icon: Flask
         },
-        page: () => import('@/views/ColorGame.vue'),
+        // page: () => ,
         children: [
           {
-            name: '0',
-            path: 'emm',
-            component: () => import('@/views/TestMulti.vue'),
+            path: 'colors',
+            name: 'colors',
             meta: {
-              keepAlive: true,
-              title: '测试其一·嵌套'
-            }
+              title: '辩色龙',
+              icon: ColorPalette,
+              keepAlive: true
+            },
+            component: () => import('@/views/dev/undone/ColorGame.vue')
           }
         ]
-      },
-      {
-        path: '2',
-        name: 'test2',
-        meta: {
-          title: '测试其二',
-          keepAlive: true
-        },
-        component: () => import('@/views/TestMain.vue')
       }
     ]
   },
@@ -87,29 +81,11 @@ export const menu = [
     path: '/tool',
     name: 'tool',
     meta: {
-      title: '功能',
-      icon: Albums
+      title: '工具',
+      icon: Briefcase
     },
-    page: () => import('@/views/ToolGroup.vue'),
+    page: () => import('@/views/GroupTool.vue'),
     children: [
-      {
-        path: '1',
-        name: 'func1',
-        meta: {
-          title: "饼图",
-          keepAlive: true
-        },
-        component: () => import('@/views/PieChartTest.vue')
-      },
-      {
-        path: '2',
-        name: 'func2',
-        meta: {
-          title: "不是验证码。",
-          keepAlive: true
-        },
-        component: () => import('@/views/VeriCodeTest.vue')
-      }
     ]
   }
 ]
@@ -121,7 +97,7 @@ export const action: ExtendedRecord[] = [
       icon: InformationCircle,
       title: "关于"
     },
-    component: () => import('@/views/AppSetting.vue')
+    component: () => import('@/views/app/AppSetting.vue')
   },
   {
     path: '/setting',
@@ -130,7 +106,7 @@ export const action: ExtendedRecord[] = [
       icon: Settings,
       title: "设置"
     },
-    component: () => import('@/views/AppSetting.vue')
+    component: () => import('@/views/app/AppInfo.vue')
   }
 ]
 export const result: ExtendedRecord[] = [
