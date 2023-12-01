@@ -1,5 +1,5 @@
 <template>
-    <n-layout>
+    <n-layout :native-scrollbar="false">
         <n-layout-header>
             <n-h1 style="margin: 0px">调色板</n-h1>
         </n-layout-header>
@@ -152,6 +152,10 @@ const bgColor = computed(() => ({
 </script>
 
 <style lang="scss" scoped>
+.wrapper {
+    height: 100%;
+    overflow-y: hidden;
+}
 .i-space {
     width: 100%;
 
