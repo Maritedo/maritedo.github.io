@@ -17,63 +17,30 @@
         </n-layout-content>
         <n-layout-footer>
             <n-card title="调色板">
-                <n-switch v-model:value="hslMode"
-                    :rail-style="(v) => { return { backgroundColor: hslMode ? '#fc6' : '#6cf' } }">
-                    <template #checked>
-                        HSL
-                    </template>
-                    <template #unchecked>
+                <n-space vertical>
+                    <span>
                         RGB
-                    </template>
-                </n-switch>
-                <transition-group>
-                    <n-space v-if="hslMode" vertical>
-                        <n-input-number v-model:value="H">
-                            <template #prefix>
-                                H
+                        <n-switch v-model:value="hslMode"
+                            :rail-style="(v) => { return { backgroundColor: hslMode ? '#fc6' : '#6cf' } }">
+                            <template #checked>
                             </template>
-                        </n-input-number>
-                        <n-slider v-model:value="H" :step="1" :min="0" :max="360" />
-                        <n-divider />
-                        <n-input-number v-model:value="S">
-                            <template #prefix>
-                                S
+                            <template #unchecked>
                             </template>
-                        </n-input-number>
-                        <n-slider v-model:value="S" :step="1" :min="0" :max="100" />
-                        <n-divider />
-                        <n-input-number v-model:value="L">
-                            <template #prefix>
-                                L
-                            </template>
-                        </n-input-number>
-                        <n-slider v-model:value="L" :step="1" :min="0" :max="100" />
+                        </n-switch>
+                        HSL
+                    </span>
+                    <n-space vertical>
+                        <template v-for="(item, index) in (hslMode ? HSL : RGB)" :key="index">
+                            <n-space inline :wrap="false" align="center" :wrap-item="false" justify="center">
+                                <n-input-number v-model:value="item.value">
+                                    <template #prefix>{{ item.key }}</template>
+                                    <template v-if="item.suffix" #suffix>{{ item.suffix }}</template>
+                                </n-input-number>
+                                <n-slider v-model:value="item.value" :step="1" :min="item.min" :max="item.max" />
+                            </n-space>
+                        </template>
                     </n-space>
-
-                    <n-space v-if="!hslMode" vertical>
-
-                        <n-input-number v-model:value="R">
-                            <template #prefix>
-                                R
-                            </template>
-                        </n-input-number>
-                        <n-slider v-model:value="R" :step="1" :min="0" :max="255" />
-                        <n-divider />
-                        <n-input-number v-model:value="G">
-                            <template #prefix>
-                                G
-                            </template>
-                        </n-input-number>
-                        <n-slider v-model:value="G" :step="1" :min="0" :max="255" />
-                        <n-divider />
-                        <n-input-number v-model:value="B">
-                            <template #prefix>
-                                B
-                            </template>
-                        </n-input-number>
-                        <n-slider v-model:value="B" :step="1" :min="0" :max="255" />
-                    </n-space>
-                </transition-group>
+                </n-space>
             </n-card>
         </n-layout-footer>
     </n-layout>
@@ -83,18 +50,53 @@
 import { Pause } from '@vicons/ionicons5'
 import { computed } from 'vue'
 const hslMode = ref(false)
-const R = ref(0)
-const G = ref(0)
-const B = ref(0)
-const H = ref(0)
-const S = ref(0)
-const L = ref(0)
+const RGB = ref([
+    {
+        key: 'R',
+        value: 64,
+        min: 0,
+        max: 255
+    },
+    {
+        key: 'G',
+        value: 191,
+        min: 0,
+        max: 255,
+    },
+    {
+        key: 'B',
+        value: 191,
+        min: 0,
+        max: 255,
+    }
+])
+const HSL = ref([
+    {
+        key: 'H',
+        value: 180,
+        min: 0,
+        max: 360
+    },
+    {
+        key: 'S',
+        value: 50,
+        min: 0,
+        max: 100,
+        suffix: '%'
+    },
+    {
+        key: 'L',
+        value: 50,
+        min: 0,
+        max: 100,
+        suffix: '%'
+    }
+])
 const bgColor = computed(() => ({
     backgroundColor: hslMode.value ? colorHSL.value : colorRGB.value
 }))
-const colorHSL = computed(() => `hsl(${H.value}, ${S.value}%, ${L.value}%)`)
-const colorRGB = computed(() => `rgb(${R.value},${G.value},${B.value})`)
-
+const colorHSL = computed(() => `hsl(${HSL.value[0].value}, ${HSL.value[1].value}%, ${HSL.value[1].value}%)`)
+const colorRGB = computed(() => `rgb(${RGB.value[0].value},${RGB.value[1].value},${RGB.value[1].value})`)
 </script>
 <style lang="scss" scoped>
 .testDisp {

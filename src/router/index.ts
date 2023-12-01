@@ -1,6 +1,12 @@
 import { createRouter, createWebHistory, createWebHashHistory, type RouteRecordRaw } from 'vue-router'
 import { type ExtendedRecord } from '../scripts/normal'
-import { Albums, FishOutline, Home } from '@vicons/ionicons5'
+import {
+  Albums,
+  Fish,
+  Home,
+  Settings,
+  InformationCircle
+} from '@vicons/ionicons5'
 
 const legacy = true
 const useHash = import.meta.env.MODE !== 'development' && legacy
@@ -26,20 +32,7 @@ export const getDisplayNames = (names: string[]): { original: string, display: s
   return result
 }
 
-export const routes: ExtendedRecord[] = (function _(datas: ExtendedRecord[]) {
-  for (const data of datas)
-    if (data.children && _(data.children))
-      data.page && data.children.unshift({
-        path: '',
-        name: `$${String(data.name)}`,
-        component: data.page,
-        meta: {
-          title: data.meta?.title || defaultTitle,
-          menuDefault: true
-        }
-      })
-  return datas
-})([
+export const menu = [
   {
     path: '/',
     name: 'home',
@@ -55,7 +48,7 @@ export const routes: ExtendedRecord[] = (function _(datas: ExtendedRecord[]) {
     name: 'test',
     meta: {
       title: '测试集',
-      icon: FishOutline
+      icon: Fish
     },
     page: () => import('@/views/TestGroup.vue'),
     children: [
@@ -118,13 +111,58 @@ export const routes: ExtendedRecord[] = (function _(datas: ExtendedRecord[]) {
         component: () => import('@/views/VeriCodeTest.vue')
       }
     ]
+  }
+]
+export const action: ExtendedRecord[] = [
+  {
+    path: '/about',
+    name: 'about',
+    meta: {
+      icon: InformationCircle,
+      title: "关于"
+    },
+    component: () => import('@/views/AppSetting.vue')
   },
+  {
+    path: '/setting',
+    name: 'setting',
+    meta: {
+      icon: Settings,
+      title: "设置"
+    },
+    component: () => import('@/views/AppSetting.vue')
+  }
+]
+export const result: ExtendedRecord[] = [
   {
     path: '/:catchAll(.*)',
     name: '404',
     component: () => import('@/views/PageNotFound.vue')
   }
-])
+]
+export const routes: ExtendedRecord[] = (function (...v: ExtendedRecord[][]) {
+  v.forEach((function _(datas: ExtendedRecord[]) {
+    for (const data of datas)
+      if (data.children && _(data.children))
+        data.page && data.children.unshift({
+          path: '',
+          name: `$${String(data.name)}`,
+          component: data.page,
+          meta: {
+            title: data.meta?.title || defaultTitle,
+            menuDefault: true
+          }
+        })
+    return datas
+  }))
+  return (function (...rawDatas: ExtendedRecord[][]) {
+    let result: ExtendedRecord[] = []
+    for (const item of rawDatas) {
+      result = result.concat(item)
+    }
+    return result
+  })(...v)
+})(menu, action, result)
 
 const router = createRouter({
   history: useHash ?

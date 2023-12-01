@@ -1,21 +1,13 @@
 <template>
   <n-config-provider fullH :theme="appConfig.curTheme">
     <n-layout class="n-container" content-style="display: flex; flex-direction: column;" fullH>
-      <n-layout-header
-        class="n-header"
-        bordered
-        @click.prevent
-        style="box-shadow: var(--box-shadow-1)"
-      >
+      <n-layout-header class="n-header" bordered @click.prevent style="box-shadow: var(--box-shadow-1)">
         <n-page-header @back="appRouter.go(-1)">
           <template #title>
             <n-breadcrumb class="breadcrumb">
               <n-breadcrumb-item :clickable="false"> 测试应用 </n-breadcrumb-item>
-              <transition
-                name="breadcrumb"
-                v-for="(name, index) in getDisplayNames(menuRef?.activePath || [])"
-                :key="index"
-              >
+              <transition name="breadcrumb" v-for="(name, index) in getDisplayNames(section)"
+                :key="index">
                 <n-breadcrumb-item :key="name.original" @click.prevent="onBreadcurmbClick">
                   <router-link :to="{ name: name.original }">
                     {{ name.display }}
@@ -25,11 +17,7 @@
             </n-breadcrumb>
           </template>
           <template #extra>
-            <n-switch
-              :rail-style="dayNightRail"
-              :value="appConfig.useDark"
-              @update:value="appConfig.changeTheme()"
-            >
+            <n-switch :rail-style="dayNightRail" :value="appConfig.useDark" @update:value="appConfig.changeTheme()">
               <template #checked>
                 <n-icon size="large">
                   <MoonIcon />
@@ -46,13 +34,14 @@
       </n-layout-header>
       <n-layout class="n-main" has-sider>
         <n-layout-sider class="n-sider" collapse-mode="width" bordered show-trigger>
-          <n-menu
-            ref="menuRef"
-            :options="menuOptions"
-            :default-expanded-keys="defaultExpandedKeys"
-            :value="curPage"
-            class="i-menu"
-          />
+          <div class="i-wrapper">
+            <n-menu ref="menuRef" class="i-menu" :options="menuOptions" :default-expanded-keys="defaultExpandedKeys"
+              :value="curPage" />
+            <div class="i-actions">
+              <n-menu ref="actionRef" class="i-action-menu" :options="actionsOptions" :value="curAction">
+              </n-menu>
+            </div>
+          </div>
         </n-layout-sider>
         <n-layout-content class="n-content router-root" :native-scrollbar="false">
           <router-view v-slot="{ Component, route }">
@@ -73,14 +62,20 @@
 import { type Ref, ref, computed, watch, onMounted } from 'vue'
 import { useNotification, useThemeVars, darkTheme, NMenu } from 'naive-ui'
 import type { MenuOption, NBreadcrumb } from 'naive-ui'
-import { Moon as MoonIcon, Sunny as SunIcon } from '@vicons/ionicons5'
+import {
+  Moon as MoonIcon,
+  Sunny as SunIcon
+} from '@vicons/ionicons5'
 import { RouterView, useRouter } from 'vue-router'
-import { routes, getDisplayNames } from '@/router/index'
+import { menu, action, getDisplayNames } from '@/router/index'
 import { useConfigStore as useConfigs } from '@/stores/configs'
-import { configureThemeColor, simulateClick, genMenuOptions as genMenu } from '@/scripts/normal'
+import { configureThemeColor, simulateClick, genMenuOptions as genMenu, type ExtendedRecord } from '@/scripts/normal'
 
 const menuRef: Ref<null | typeof NMenu> = ref(null)
+const actionRef: Ref<null | typeof NMenu> = ref(null)
 const curPage: Ref<any> = ref()
+const curAction: Ref<any> = ref()
+const section: Ref<string[]> = ref([])
 
 const themeVars = useThemeVars()
 const appConfig = useConfigs()
@@ -88,13 +83,33 @@ const appRouter = useRouter()
 const appNotify = useNotification()
 
 appRouter.beforeEach((to) => {
-  curPage.value = to.name
-  if (menuRef.value && to.name && !(to.name in menuRef.value.activePath))
-    menuRef.value.showOption(to.name)
+  const nav = (v: Ref, t: Ref<any>) => {
+    if (v.value && to.name && !(to.name in v.value.activePath))
+      v.value.showOption(to.name)
+    t.value = to.name
+    setTimeout(() => {
+      section.value = v.value?.activePath || []
+    })
+  }
+  curPage.value = curAction.value = null;
+  switch (([action, menu]).find((v) => {
+    return (function _(vals: ExtendedRecord[]) {
+      for (const val of vals) {
+        if (val.name == to.name) return true
+        else if (val.children && _(val.children)) return true
+      }
+      return false
+    })(v)
+  })) {
+    case action: nav(actionRef, curAction); break;
+    case menu: nav(menuRef, curPage); break;
+  }
   return to.name ? appRouter.hasRoute(to.name) : false
 })
 
-const menuOptions: MenuOption[] = genMenu(routes)
+
+const menuOptions: MenuOption[] = genMenu(menu)
+const actionsOptions: MenuOption[] = genMenu(action)
 const defaultExpandedKeys: string[] = []
 
 const onBreadcurmbClick = (e: PointerEvent) => {
@@ -116,7 +131,7 @@ onMounted(() => {
       content: '你好！',
       duration: 2560
     })
-  } else appConfig.firstRun = true
+  }
   watch(
     computed(() => appConfig.useDark),
     (v) => {
@@ -154,8 +169,28 @@ onMounted(() => {
   box-sizing: border-box;
 }
 
-.i-menu {
-  text-align: left;
+
+.i-wrapper {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+
+  .i-menu {
+    text-align: left;
+    flex: 1 0 auto;
+  }
+
+  .i-actions {
+    flex-direction: row;
+    display: flex;
+    align-items: flex-end;
+
+    .i-action-menu {
+      width: 100%;
+    }
+  }
+
 }
 
 .fade-enter-to,
@@ -207,7 +242,7 @@ onMounted(() => {
 </style>
 
 <style lang="scss">
-.breadcrumb-leave-active:nth-last-child(2) > span:last-child {
+.breadcrumb-leave-active:nth-last-child(2)>span:last-child {
   display: none;
 }
 

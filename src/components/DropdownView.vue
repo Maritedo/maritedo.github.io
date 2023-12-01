@@ -15,7 +15,7 @@
         <div ref="container" class="container">
             <div ref="content" class="content" align="center">
                 <slot />
-            </div>;
+            </div>
         </div>
     </div>
 </template>

@@ -3,6 +3,16 @@ import { RouterLink, type RouteRecordRaw, type RouteRecordName } from 'vue-route
 import { type MenuOption, NIcon } from 'naive-ui'
 import type { AllowedComponentProps, ComponentCustomProps, ComponentOptionsMixin, DefineComponent, EmitsOptions, VNodeProps } from 'vue'
 
+export const renderActionOption = (title: string, callback: (e: PointerEvent) => {}) =>
+  () => h('a', {
+    onclick: (e: PointerEvent) => {
+      e.preventDefault()
+      callback(e)
+    }
+  },
+    title
+  )
+
 export const renderIcon = (icon: any) => {
   return () => h(NIcon, null, { default: () => h(icon) })
 }
