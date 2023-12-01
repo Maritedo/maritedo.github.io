@@ -89,11 +89,9 @@ const B = ref(0)
 const H = ref(0)
 const S = ref(0)
 const L = ref(0)
-const bgColor = computed(() => {
-    return {
-        backgroundColor: hslMode.value ? colorHSL.value : colorRGB.value
-    }
-})
+const bgColor = computed(() => ({
+    backgroundColor: hslMode.value ? colorHSL.value : colorRGB.value
+}))
 const colorHSL = computed(() => `hsl(${H.value}, ${S.value}%, ${L.value}%)`)
 const colorRGB = computed(() => `rgb(${R.value},${G.value},${B.value})`)
 

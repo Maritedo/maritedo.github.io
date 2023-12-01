@@ -5,14 +5,12 @@ import type { AllowedComponentProps, ComponentCustomProps, ComponentOptionsMixin
 
 export const renderIcon = (icon: any) => {
   return () => h(NIcon, null, { default: () => h(icon) })
-} 
-
-export const renderLink = (label: string, to: RouteRecordName | undefined, key = to) => {
-  return {
-    label: () => h(RouterLink, { to: { name: to } }, { default: () => label }),
-    key: String(key)
-  }
 }
+
+export const renderLink = (label: string, to: RouteRecordName | undefined, key = to) => ({
+  label: () => h(RouterLink, { to: { name: to } }, { default: () => label }),
+  key: String(key)
+})
 
 export const configureThemeColor = (color: string) => {
   document.querySelectorAll('meta[name="theme-color"]').forEach((meta) => {
@@ -109,19 +107,15 @@ export const getDPI = (/* ctx: CanvasRenderingContext2D | OffscreenCanvasRenderi
   return window.devicePixelRatio || 1// Dece / (ctx.backingStorePixelRatio || 1)
 }
 
-export const Rec = (r: number, theta: number) => {
-  return {
-    x: Math.cos(theta) * r,
-    y: Math.sin(theta) * r
-  }
-}
+export const Rec = (r: number, theta: number) => ({
+  x: Math.cos(theta) * r,
+  y: Math.sin(theta) * r
+})
 
-export const Pol = (x: number, y: number) => {
-  return {
-    r: Math.sqrt(x ** 2 + y ** 2),
-    theta: Math.atan2(y, x) % 360
-  }
-}
+export const Pol = (x: number, y: number) => ({
+  r: Math.sqrt(x ** 2 + y ** 2),
+  theta: Math.atan2(y, x) % 360
+})
 
 export const random = {
   chars: "112233445566778899abcdefghijkmnrtuyzABDEFGHIJKLMNQRTVY",

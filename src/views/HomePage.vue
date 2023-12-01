@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <iframe ref='iFrame' style="width: 100%; height: 100%" src="https://maritedo.github.io/Vue-PWA/" frameborder="0"></iframe>
+        <iframe ref='iFrame' style="width: 100%; height: 100%" src="" frameborder="0"></iframe>
     </div>
 </template>
 
