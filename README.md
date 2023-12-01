@@ -1,3 +1,7 @@
+# 自用PWA应用模板
+
+[![Deploy static content to Pages](https://github.com/Maritedo/Vue-PWA/actions/workflows/main.pages.yml/badge.svg)](https://github.com/Maritedo/Vue-PWA/actions/workflows/main.pages.yml)
+
 # 使用Vue.js技术栈搭建的一个网页应用（**PWA**）
 
 ## 使用如下技术栈
