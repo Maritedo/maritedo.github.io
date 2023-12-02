@@ -8,7 +8,9 @@ import {
   Flask,
   ColorPalette,
   Construct,
-Flash
+  Flash,
+  Fish,
+  Warning
 } from '@vicons/ionicons5'
 
 const legacy = true
@@ -80,7 +82,7 @@ export const portal = [
             name: 'newfolder',
             meta: {
               title: '新建文件夹（1）',
-              icon: ColorPalette,
+              icon: Fish,
               keepAlive: true
             },
             component: () => import('@/views/dev/undone/ColorGame.vue')
@@ -125,6 +127,7 @@ export const portal = [
     name: 'dev404',
     redirect: '404',
     meta: {
+      icon: Warning,
       title: '[DEV]404'
     }
   }
