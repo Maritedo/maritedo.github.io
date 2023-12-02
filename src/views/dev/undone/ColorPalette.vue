@@ -152,10 +152,6 @@ const bgColor = computed(() => ({
 </script>
 
 <style lang="scss" scoped>
-.wrapper {
-    height: 100%;
-    overflow-y: hidden;
-}
 .i-space {
     width: 100%;
 

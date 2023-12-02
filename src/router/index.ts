@@ -7,7 +7,8 @@ import {
   InformationCircle,
   Flask,
   ColorPalette,
-  Construct
+  Construct,
+Flash
 } from '@vicons/ionicons5'
 
 const legacy = true
@@ -34,7 +35,7 @@ export const getDisplayNames = (names: string[]): { original: string, display: s
   return result
 }
 
-export const menu = [
+export const portal = [
   {
     path: '/',
     name: 'home',
@@ -73,6 +74,27 @@ export const menu = [
             },
             component: () => import('@/views/dev/undone/ColorGame.vue')
           },
+
+          {
+            path: 'newfolder',
+            name: 'newfolder',
+            meta: {
+              title: '新建文件夹（1）',
+              icon: ColorPalette,
+              keepAlive: true
+            },
+            component: () => import('@/views/dev/undone/ColorGame.vue')
+          }
+        ]
+      },
+      {
+        path: 'almost',
+        name: 'almost',
+        meta: {
+          title: '几近完成的项目',
+          icon: Flash
+        },
+        children: [
           {
             path: 'colors',
             name: 'colors',
@@ -97,6 +119,14 @@ export const menu = [
     page: () => import('@/views/GroupTool.vue'),
     children: [
     ]
+  },
+  {
+    path: '/dev-404',
+    name: 'dev404',
+    redirect: '404',
+    meta: {
+      title: '[DEV]404'
+    }
   }
 ]
 export const action: ExtendedRecord[] = [
@@ -107,7 +137,7 @@ export const action: ExtendedRecord[] = [
       icon: InformationCircle,
       title: "关于"
     },
-    component: () => import('@/views/app/AppSetting.vue')
+    component: () => import('@/views/app/AppInfo.vue')
   },
   {
     path: '/setting',
@@ -116,7 +146,7 @@ export const action: ExtendedRecord[] = [
       icon: Settings,
       title: "设置"
     },
-    component: () => import('@/views/app/AppInfo.vue')
+    component: () => import('@/views/app/AppSetting.vue')
   }
 ]
 export const result: ExtendedRecord[] = [
@@ -148,7 +178,7 @@ export const routes: ExtendedRecord[] = (function (...v: ExtendedRecord[][]) {
     }
     return result
   })(...v)
-})(menu, action, result)
+})(portal, action, result)
 
 const router = createRouter({
   history: useHash ?

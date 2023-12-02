@@ -39,7 +39,7 @@ export const getArgs = () => {
   return args
 }
 
-export const simulateClick = (ele: HTMLElement) => {
+export const simulateClick = (ele: HTMLElement | Element) => {
   ele.dispatchEvent(new PointerEvent("click", {
     view: window,
     bubbles: false,
@@ -61,8 +61,9 @@ export type ExtendedRecord = RouteRecordRaw & {
   children?: ExtendedRecord[],
 }
 
-export const genMenuOptions = (records: ExtendedRecord[]): Array<MenuOption | MenuDividerOption | MenuGroupOption> => {
-  const result = new Array<MenuOption | MenuDividerOption | MenuGroupOption>
+export type DiversedOption = MenuOption | MenuDividerOption | MenuGroupOption
+export const genMenuOptions = (records: ExtendedRecord[]): DiversedOption[] => {
+  const result: DiversedOption[] = []
   for (const route of records) {
     const m = route.meta
     if (m && !m.virtual)
@@ -122,6 +123,10 @@ export const Pol = (x: number, y: number) => ({
   r: Math.sqrt(x ** 2 + y ** 2),
   theta: Math.atan2(y, x) % 360
 })
+
+export function getOverrided<T>(origin: T, overrides: object) {
+  return Object.assign(Object.assign({}, origin), overrides) as T
+}
 
 export const random = {
   chars: "112233445566778899abcdefghijkmnrtuyzABDEFGHIJKLMNQRTVY",
