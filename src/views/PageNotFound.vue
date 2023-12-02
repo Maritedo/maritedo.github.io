@@ -24,6 +24,6 @@
 
 .r-link {
   text-decoration: none;
-  color: var(--primaryColor);
+  color: unset;
 }
 </style>

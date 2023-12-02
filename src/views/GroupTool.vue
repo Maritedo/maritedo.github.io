@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        工具
+        这里是“工具”栏目，但现在什么也没有
     </div>
 </template>
 

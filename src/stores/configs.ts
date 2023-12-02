@@ -1,7 +1,8 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { darkTheme /*, useOsTheme */ } from 'naive-ui'
+import { darkTheme, lightTheme } from 'naive-ui'
 import type { BuiltInGlobalTheme } from 'naive-ui/es/themes/interface'
+
 
 export const useConfigStore = defineStore('configs', {
   state: () => ({
@@ -14,6 +15,9 @@ export const useConfigStore = defineStore('configs', {
   getters: {
     currentTheme(): BuiltInGlobalTheme | null {
       return this.useDarkTheme ? darkTheme : null
+    },
+    themeVars(): any {
+      return this.useDarkTheme ? darkTheme.common : lightTheme.common
     },
     useDarkTheme(state): boolean {
       return state.useSystemTheme ? state.osTheme == 'dark' : state.userDarkTheme

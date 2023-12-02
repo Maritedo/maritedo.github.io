@@ -50,14 +50,10 @@ export const simulateClick = (ele: HTMLElement | Element) => {
 export type ExtendedRecord = RouteRecordRaw & {
   meta?: {
     title: string,
-    virtual?: boolean,
+    virtual?: boolean, // 针对具有自己的页面的树节点自动建立的虚拟子节点使用的判别属性
     icon?: DefineComponent<{}, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, EmitsOptions, string, VNodeProps & AllowedComponentProps & ComponentCustomProps, Readonly<any>, {}, {}>,
-    menuDefault?: boolean,
-    menuGroup?: boolean,
-    keepAlive?: boolean,
-    [key: string]: any
+    [key: string]: any // 其他属性
   },
-  page?: () => Promise<any>,
   children?: ExtendedRecord[],
 }
 
@@ -68,7 +64,7 @@ export const genMenuOptions = (records: ExtendedRecord[]): DiversedOption[] => {
     const m = route.meta
     if (m && !m.virtual)
       result.push({
-        label: route.name ? renderLink(m.title, route.name) : h('p', String(route.name)),
+        label: (route.name && route.component || route.redirect) ? renderLink(m.title, route.name) : () => h('a', { innerText: m.title }),
         key: String(route.name),
         icon: m.icon ? renderIcon(m.icon) : undefined,
         children: route.children && route.children.length ? genMenuOptions(route.children) : undefined
