@@ -29,11 +29,12 @@ type dispNameMapper = {
  */
 export const getDisplayNames = (names: string[]): dispNameMapper[] => {
   const result: dispNameMapper[] = []
-  let curNodes: ExtendedRecord[] | undefined = routes, curNode: ExtendedRecord | undefined
+  let curNodes: ExtendedRecord[] | undefined = routes,
+    curNode: ExtendedRecord | undefined
   for (const curName of names)
-    if ((curNode = curNodes?.find((v) => (
+    if ((curNode = curNodes?.find(v =>
       v.name == curName || (v.children && v.children.length && v.children[0].name == curName)
-    )))) {
+    ))) {
       curNodes = curNode.children
       result.push({
         original: curName,
