@@ -225,13 +225,12 @@ onMounted(() => {
         -webkit-app-region: drag;
         height: var(--title-height);
 
-
         .n-header-bar {
+            height: 100%;
+
             .n-header-bar-wrapper {
                 height: 100%;
             }
-
-            height: 100%;
 
             [nonedrag]:last-child {
                 -webkit-app-region: drag;
@@ -246,11 +245,8 @@ onMounted(() => {
                     display: flex;
                     height: 100%;
                     align-items: center;
-
                 }
-
             }
-
         }
     }
 
@@ -345,19 +341,22 @@ onMounted(() => {
     margin-right: auto !important;
 }
 
+// 面包屑居中
 .n-header-bar .n-page-header {
     height: 100%;
 }
 
+// 完全隐藏返回按钮
 .n-page-header__back {
     margin: 0 !important;
 }
 
+// 前进、后退按钮定位修正
 .n-action>* {
+    margin-right: 8px;
+
     &:first-child {
         margin-left: 8px;
     }
-
-    margin-right: 8px;
 }
 </style>

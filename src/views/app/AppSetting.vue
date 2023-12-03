@@ -1,32 +1,33 @@
 <template>
   <n-layout class="wrapper" :native-scrollbar="false">
     <n-space class="i-space" vertical>
-      <n-list class="i-list" hoverable clickable bordered>
+      <n-list class="i-list" hoverable bordered>
         <template #header><n-h2 reset>基本</n-h2></template>
         <n-list-item class="config-item">
           深色模式跟随系统
-          <p class="detail">将页面的颜色主题与浏览器同步，若需要与系统保持同步，请将浏览器的颜色主题设置为与系统同步。</p>
+          <p class="detail">将页面的颜色主题与浏览器同步。</p>
+          <p class="detail">若需要与系统保持同步，请将浏览器的颜色主题设置为与系统同步。</p>
           <template #suffix>
-            <n-switch v-model:value="useSystemTheme"></n-switch>
+            <n-switch v-model:value="useSystemTheme" />
           </template>
         </n-list-item>
         <n-list-item class="config-item">
           深色模式
           <template #suffix>
             <n-switch @update:value="v => userDarkTheme = v" :value="useSystemTheme ? osTheme == 'dark' : userDarkTheme"
-              :disabled="useSystemTheme"></n-switch>
+              :disabled="useSystemTheme" />
           </template>
         </n-list-item>
       </n-list>
-      <n-list class="i-list" hoverable clickable bordered>
+      <n-list class="i-list" hoverable bordered>
         <template #header><n-h2 reset>高级</n-h2></template>
         <n-list-item class="config-item">
           页面缓存
           <p class="detail">开启后，页面将被缓存，离开页面将不会使页面重置。再次进入时页面的加载速度将更快，但也会增大内存使用量。</p>
           <p class="detail">需要刷新</p>
           <template #suffix>
-            <n-space vertical class="button-n-switch">
-              <n-switch v-model:value="_keepAlive"></n-switch>
+            <n-space class="button-n-switch">
+              <n-switch v-model:value="_keepAlive" />
               <n-button :disabled="keepAlive == _keepAlive" type="info" @click="keepAlive = _keepAlive" size="small"
                 button>保存</n-button>
             </n-space>
@@ -77,7 +78,6 @@ const _keepAlive = ref(keepAlive.value)
       }
 
       .button-n-switch {
-        padding: 0;
         position: relative;
 
         [button] {

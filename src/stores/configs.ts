@@ -3,7 +3,6 @@ import { defineStore } from 'pinia'
 import { darkTheme, lightTheme } from 'naive-ui'
 import type { BuiltInGlobalTheme } from 'naive-ui/es/themes/interface'
 
-
 export const useConfigStore = defineStore('configs', {
   state: () => ({
     firstRun: ref(true),

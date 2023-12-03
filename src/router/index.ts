@@ -18,7 +18,10 @@ const useHash = import.meta.env.MODE !== 'development' && legacy
 const baseUrl = import.meta.env.BASE_URL
 const defaultTitle = '未命名'
 
-type dispNameMapper = { original: string, display: string }
+type dispNameMapper = {
+  original: string,
+  display: string
+}
 /** 
  * todo 优化算法
  * * 目前时间复杂度O(N*R) => O(N)

@@ -19,8 +19,7 @@
                 }]">
                     <n-space vertical>
                         <template v-for="(item, index) in variant.data" :key="index">
-                            <n-space class="i-space" inline :wrap="true" align="center" :wrap-item="false"
-                                justify="center">
+                            <n-space class="i-space" inline :wrap="true" align="center" :wrap-item="false" justify="center">
                                 <n-input-number class="i-input" @update:value="variant.handler" v-model:value="item.value">
                                     <template #prefix>{{ item.key }}</template>
                                     <template v-if="item.suffix" #suffix>{{ item.suffix }}</template>
@@ -39,7 +38,7 @@
 <script setup lang="ts">
 import { computed, ref, type Ref } from 'vue'
 function rgb2hsl(obj: { R: number, G: number, B: number }) {
-    // <reference: https://juejin.cn/post/7225474899480969253>
+    // reference: https://juejin.cn/post/7225474899480969253
     let { R, G, B } = obj
     let max = Math.max(R, G, B), min = Math.min(R, G, B);
     let H = 0, S = 0, L = 50 * (max + min);
@@ -60,7 +59,7 @@ function rgb2hsl(obj: { R: number, G: number, B: number }) {
     return { H, S, L };
 }
 function hsl2rgb(obj: { H: number, S: number, L: number }) {
-    // <reference: https://stackoverflow.com/questions/36721830/convert-hsl-to-rgb-and-hex>
+    // reference: https://stackoverflow.com/questions/36721830/convert-hsl-to-rgb-and-hex
     let { H, S, L } = obj
     // L *= 3000;
     const a = S * Math.min(L, 100 - L);

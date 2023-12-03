@@ -1,12 +1,10 @@
 <template>
   <n-layout style="display: flex;height:100%;align-items: center;justify-content: center;">
     <n-result style="display: flex;height:100%;align-items: center;justify-content: center;flex-direction:column;" fullH
-      class="r-main" status="404" title="页面不存在" description="请检查链接是否正确输入">
+      class="r-main" status="404" title="情况不妙..." description="你似乎来到了一片荒原">
       <template #footer>
-        <n-button>
-          <router-link class="r-link" :to="{ name: 'home' }">
-            返回主页面
-          </router-link>
+        <n-button @click="$router.push({ name: 'home' })">
+          带我回家
         </n-button>
       </template>
     </n-result>
@@ -14,7 +12,6 @@
 </template>
 
 <script setup>
-
 </script>
 
 <style lang="scss" scoped>
