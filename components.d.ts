@@ -60,7 +60,7 @@ declare module 'vue' {
     NSwitch: typeof import('naive-ui')['NSwitch']
     NTag: typeof import('naive-ui')['NTag']
     NThing: typeof import('naive-ui')['NThing']
-    PieChart: typeof import('./src/components/chart/PieChart.vue')['default']
+    PieChart: typeof import('./src/components/views/PieChart.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SwitchNav: typeof import('./src/components/SwitchNav.vue')['default']

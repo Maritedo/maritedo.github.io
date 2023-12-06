@@ -98,7 +98,7 @@ export const portal: ExtendedRecord[] = [
           {
             path: 'colors',
             name: 'colors',
-            component: () => import('@/views/dev/undone/ColorPalette.vue'),
+            component: () => import('@/views/dev/almost/ColorPalette.vue'),
             meta: {
               title: '调色板',
               icon: ColorPalette,

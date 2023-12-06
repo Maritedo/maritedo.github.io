@@ -3,6 +3,10 @@ import { RouterLink, type RouteRecordRaw, type RouteRecordName } from 'vue-route
 import { type MenuOption, NIcon, type MenuDividerOption, type MenuGroupOption } from 'naive-ui'
 import type { AllowedComponentProps, ComponentCustomProps, ComponentOptionsMixin, DefineComponent, EmitsOptions, VNodeProps } from 'vue'
 
+export const lower = (v: string) => String.fromCharCode(v.charCodeAt(0) | 32)
+export const upper = (v: string) => String.fromCharCode(v.charCodeAt(0) & 95)
+export const conve = (v: string) => String.fromCharCode(v.charCodeAt(0) ^ 32)
+
 export function renderActionOption(title: string, callback?: (e: PointerEvent) => {}) {
   return () => h('a', {
     onclick: (e: PointerEvent) => {
@@ -13,6 +17,8 @@ export function renderActionOption(title: string, callback?: (e: PointerEvent) =
     title
   )
 }
+
+
 
 export function renderIcon(icon: any) {
   return () => h(NIcon, null, { default: () => h(icon) })
