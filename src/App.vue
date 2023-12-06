@@ -204,12 +204,12 @@ const onBreadcurmbClick = (e: PointerEvent) => {
 onMounted(() => {
     // console.log(darkTheme.common)
     useNotify = appNotify.value
-    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (evt) => {
-        appConfig.osTheme.value = evt.matches ? 'light' : 'dark'
-    })
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (evt) => {
-        appConfig.osTheme.value = evt.matches ? 'dark' : 'light'
-    })
+    const colorSchemeSetter = (isLight: boolean) => {
+        appConfig.osTheme.value = isLight ? 'light' : 'dark'
+    }
+    const mediaQueryList = window.matchMedia('(prefers-color-scheme: light)')
+    colorSchemeSetter(mediaQueryList.matches)
+    mediaQueryList.addEventListener('change', (e) => colorSchemeSetter(e.matches))
     if (appConfig.firstRun.value) {
         appConfig.firstRun.value = false
         useNotify.info({
