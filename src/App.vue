@@ -207,6 +207,9 @@ onMounted(() => {
     window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (evt) => {
         appConfig.osTheme.value = evt.matches ? 'light' : 'dark'
     })
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (evt) => {
+        appConfig.osTheme.value = evt.matches ? 'dark' : 'light'
+    })
     if (appConfig.firstRun.value) {
         appConfig.firstRun.value = false
         useNotify.info({
