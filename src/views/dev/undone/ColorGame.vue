@@ -48,7 +48,8 @@ const arr = computed(() => {
 onMounted(() => {
     document.querySelector('table.grid').addEventListener('click', (e) => {
         const t = e.target;
-        if(t.tagName == 'TD' && t.classList.contains('target'))
+        if (t.tagName == 'TD' && t.classList.contains('target'))
+            ;
     })
 })
 
