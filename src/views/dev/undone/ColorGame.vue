@@ -45,7 +45,7 @@ const autoStyle = ref({
     "--target": 'green'
 });
 const size = ref(3);
-const n = ref(-1);
+const n = ref(0);
 
 const scores = ref(0);
 const topScore = ref(0);
@@ -75,7 +75,6 @@ const gameStart = () => {
     initial.value = false;
     gameTimer.start();
     paused.value = false;
-    regenerate();
 }
 
 const gamePause = () => {
@@ -119,7 +118,8 @@ onMounted(() => {
             regenerate();
         }
     });
-    updateDisp(duration * 1000)
+    updateDisp(duration * 1000);
+    regenerate();
 })
 
 </script>
