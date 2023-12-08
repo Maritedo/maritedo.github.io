@@ -202,7 +202,6 @@ const onBreadcurmbClick = (e: PointerEvent) => {
 // })
 
 onMounted(() => {
-    // console.log(darkTheme.common)
     useNotify = appNotify.value
     const colorSchemeSetter = (isLight: boolean) => {
         appConfig.osTheme.value = isLight ? 'light' : 'dark'
