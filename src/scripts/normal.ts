@@ -18,6 +18,90 @@ export function renderActionOption(title: string, callback?: (e: PointerEvent) =
   )
 }
 
+export class Timer {
+  public duration: number;
+  public onUpdateCallback: (v: number) => void;
+  public onEndCallback: () => void;
+  public tickInterval: number;
+  public remainedTime;
+  private _lastStart: number = 0;
+  private _lastTick: number = 0;
+  private resetFlag = false;
+
+  private _paused = true;
+  public get paused() {
+    return this._paused;
+  }
+  public set paused(val: boolean) {
+    this._paused = val;
+    if (!val)
+      this.__frame__(this);
+  }
+
+  constructor(duration: number, onUpdateCallback: (v: number) => void, onEndCallback: () => void, tickInterval: number = 16) {
+    this.duration = duration;
+    this.remainedTime = duration;
+    this.onUpdateCallback = onUpdateCallback;
+    this.onEndCallback = onEndCallback;
+    this.tickInterval = tickInterval;
+  }
+
+  reset() {
+    if (this.paused) {
+      this.__reset__();
+    } else {
+      this.resetFlag = true;
+      this.paused = true;
+    }
+  }
+
+  __reset__() {
+    this.resetFlag = false;
+    this.remainedTime = this.duration;
+  }
+
+  start() {
+    if (this.paused) {
+      this.onUpdateCallback(this.remainedTime);
+      this._lastStart = Date.now();
+      this._lastTick = this._lastStart;
+      this.paused = false;
+    }
+  }
+
+  pause() {
+    this.paused = true;
+  }
+
+  __frame__(timer: Timer) {
+    if (!timer.paused) {
+      const timeNow = Date.now();
+      const timeLasted = timeNow - timer._lastStart
+      if (timeLasted < timer.remainedTime) {
+        if (timeNow - timer._lastTick >= timer.tickInterval) {
+          timer._lastTick = timeNow;
+          timer.onUpdateCallback(timer.remainedTime - timeLasted);
+        }
+        requestAnimationFrame(() => timer.__frame__(timer));
+      } else {
+        timer.__end__();
+      }
+    } else {
+      if (timer.resetFlag) {
+        timer.__reset__();
+      } else {
+        timer.remainedTime -= (Date.now() - timer._lastStart);
+      }
+    }
+  }
+
+  __end__() {
+    this.remainedTime = 0;
+    this.paused = true;
+    this.onUpdateCallback(0);
+    this.onEndCallback();
+  }
+}
 
 
 export function renderIcon(icon: any) {
