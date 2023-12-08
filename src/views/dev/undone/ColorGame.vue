@@ -27,7 +27,7 @@
             <div class="container">
                 <table class="grid" :style="autoStyle">
                     <tr v-for="x in arr" :key="x">
-                        <td v-for="y in arr" :key="y" :class="[(!paused && isTarget(x, y)) ? 'target' : null]">
+                        <td v-for="y in arr" :key="y" :class="[paused ? 'paused' : (isTarget(x, y) ? 'target' : null)]">
                         </td>
                     </tr>
                 </table>
@@ -160,9 +160,14 @@ onMounted(() => {
                 background-color: var(--normal);
                 flex: 1;
                 margin: 5%;
+                transition: background-color .05s linear;
 
                 &.target {
                     background-color: var(--target);
+                }
+
+                &.paused {
+                    background-color: #333;
                 }
             }
         }
