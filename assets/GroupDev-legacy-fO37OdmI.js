@@ -1,0 +1,1 @@
+System.register(["./index-legacy-myV676-I.js"],(function(e,t){"use strict";var n,r,c;return{setters:[e=>{n=e._,r=e.o,c=e.c}],execute:function(){const t={class:"container"};e("default",n({},[["render",function(e,n){return r(),c("div",t," 这里是“开发”栏目，但现在什么也没有 ")}]]))}}}));

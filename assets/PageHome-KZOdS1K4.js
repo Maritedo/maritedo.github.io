@@ -1,0 +1,1 @@
+import{_ as e,o as c,c as o}from"./index-xpDPD9za.js";const t={},s={class:"container"};function a(n,_){return c(),o("div",s," 主页制作中... ")}const d=e(t,[["render",a],["__scopeId","data-v-999c7794"]]);export{d as default};
